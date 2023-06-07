@@ -1,42 +1,42 @@
 -- Create Suppliers table
-CREATE TABLE Suppliers (
-                           SupplierID SERIAL PRIMARY KEY,
-                           Name VARCHAR(255) NOT NULL,
-                           Address VARCHAR(255),
-                           ContactNumber VARCHAR(20),
-                           Email VARCHAR(255)
+CREATE TABLE suppliers (
+                           supplier_id SERIAL PRIMARY KEY,
+                           name VARCHAR,
+                           address VARCHAR,
+                           contact_number VARCHAR,
+                           email VARCHAR
 );
 
 -- Create Products table
-CREATE TABLE Products (
-                          ProductID SERIAL PRIMARY KEY,
-                          Name VARCHAR(255) NOT NULL,
-                          Description TEXT,
-                          Category VARCHAR(255),
-                          SupplierID INT,
-                          Cost DECIMAL(10, 2),
-                          SellingPrice DECIMAL(10, 2),
-                          Quantity INT,
-                          FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID)
+CREATE TABLE products (
+                          product_id SERIAL PRIMARY KEY,
+                          name VARCHAR,
+                          description TEXT,
+                          category VARCHAR,
+                          supplier_id INT,
+                          cost DECIMAL(10, 2),
+                          selling_price DECIMAL(10, 2),
+                          quantity INT,
+                          FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_id)
 );
 
 -- Create Customers table
-CREATE TABLE Customers (
-                           CustomerID SERIAL PRIMARY KEY,
-                           Name VARCHAR(255) NOT NULL,
-                           Address VARCHAR(255),
-                           ContactNumber VARCHAR(20),
-                           Email VARCHAR(255)
+CREATE TABLE customers (
+                           customer_id SERIAL PRIMARY KEY,
+                           name VARCHAR,
+                           address VARCHAR,
+                           contact_number VARCHAR,
+                           email VARCHAR
 );
 
 -- Create Sales table
-CREATE TABLE Sales (
-                       SaleID SERIAL PRIMARY KEY,
-                       ProductID INT,
-                       CustomerID INT,
-                       Quantity INT,
-                       SaleDate DATE,
-                       TotalPrice DECIMAL(10, 2),
-                       FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
-                       FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+CREATE TABLE sales (
+                       sale_id SERIAL PRIMARY KEY,
+                       product_id INT,
+                       customer_id INT,
+                       quantity INT,
+                       sale_date DATE,
+                       total_price DECIMAL(10, 2),
+                       FOREIGN KEY (product_id) REFERENCES products(product_id),
+                       FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );

@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createProduct = `-- name: CreateProduct :one
@@ -21,17 +20,17 @@ INSERT INTO products (
     quantity
 ) VALUES (
              $1, $2, $3, $4, $5, $6, $7
-         ) RETURNING product_id, name, description, category, supplier_id, cost, selling_price, quantity
+         ) RETURNING product_id, name, description, category, supplier_id, cost, selling_price, quantity, created_at
 `
 
 type CreateProductParams struct {
-	Name         sql.NullString `json:"name"`
-	Description  sql.NullString `json:"description"`
-	Category     sql.NullString `json:"category"`
-	SupplierID   sql.NullInt32  `json:"supplier_id"`
-	Cost         sql.NullString `json:"cost"`
-	SellingPrice sql.NullString `json:"selling_price"`
-	Quantity     sql.NullInt32  `json:"quantity"`
+	Name         string `json:"name"`
+	Description  string `json:"description"`
+	Category     string `json:"category"`
+	SupplierID   int32  `json:"supplier_id"`
+	Cost         int64  `json:"cost"`
+	SellingPrice int64  `json:"selling_price"`
+	Quantity     int32  `json:"quantity"`
 }
 
 func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error) {
@@ -54,6 +53,7 @@ func (q *Queries) CreateProduct(ctx context.Context, arg CreateProductParams) (P
 		&i.Cost,
 		&i.SellingPrice,
 		&i.Quantity,
+		&i.CreatedAt,
 	)
 	return i, err
 }
@@ -69,7 +69,7 @@ func (q *Queries) DeleteProduct(ctx context.Context, productID int32) error {
 }
 
 const getProduct = `-- name: GetProduct :one
-SELECT product_id, name, description, category, supplier_id, cost, selling_price, quantity FROM products
+SELECT product_id, name, description, category, supplier_id, cost, selling_price, quantity, created_at FROM products
 WHERE product_id = $1 LIMIT 1
 `
 
@@ -85,12 +85,13 @@ func (q *Queries) GetProduct(ctx context.Context, productID int32) (Product, err
 		&i.Cost,
 		&i.SellingPrice,
 		&i.Quantity,
+		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const listProduct = `-- name: ListProduct :many
-SELECT product_id, name, description, category, supplier_id, cost, selling_price, quantity FROM products
+SELECT product_id, name, description, category, supplier_id, cost, selling_price, quantity, created_at FROM products
 ORDER BY product_id
 LIMIT $1
     OFFSET $2
@@ -119,6 +120,7 @@ func (q *Queries) ListProduct(ctx context.Context, arg ListProductParams) ([]Pro
 			&i.Cost,
 			&i.SellingPrice,
 			&i.Quantity,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -142,17 +144,17 @@ SET  name = $2,
      selling_price = $6,
      quantity = $7
 WHERE product_id = $1
-RETURNING product_id, name, description, category, supplier_id, cost, selling_price, quantity
+RETURNING product_id, name, description, category, supplier_id, cost, selling_price, quantity, created_at
 `
 
 type UpdateProductParams struct {
-	ProductID    int32          `json:"product_id"`
-	Name         sql.NullString `json:"name"`
-	Description  sql.NullString `json:"description"`
-	Category     sql.NullString `json:"category"`
-	Cost         sql.NullString `json:"cost"`
-	SellingPrice sql.NullString `json:"selling_price"`
-	Quantity     sql.NullInt32  `json:"quantity"`
+	ProductID    int32  `json:"product_id"`
+	Name         string `json:"name"`
+	Description  string `json:"description"`
+	Category     string `json:"category"`
+	Cost         int64  `json:"cost"`
+	SellingPrice int64  `json:"selling_price"`
+	Quantity     int32  `json:"quantity"`
 }
 
 func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) (Product, error) {
@@ -175,6 +177,7 @@ func (q *Queries) UpdateProduct(ctx context.Context, arg UpdateProductParams) (P
 		&i.Cost,
 		&i.SellingPrice,
 		&i.Quantity,
+		&i.CreatedAt,
 	)
 	return i, err
 }

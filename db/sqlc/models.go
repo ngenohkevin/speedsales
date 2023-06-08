@@ -6,40 +6,45 @@ package db
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Customer struct {
 	CustomerID    int32          `json:"customer_id"`
-	Name          sql.NullString `json:"name"`
+	Name          string         `json:"name"`
 	Address       sql.NullString `json:"address"`
-	ContactNumber sql.NullString `json:"contact_number"`
+	ContactNumber string         `json:"contact_number"`
 	Email         sql.NullString `json:"email"`
+	CreatedAt     time.Time      `json:"created_at"`
 }
 
 type Product struct {
-	ProductID    int32          `json:"product_id"`
-	Name         sql.NullString `json:"name"`
-	Description  sql.NullString `json:"description"`
-	Category     sql.NullString `json:"category"`
-	SupplierID   sql.NullInt32  `json:"supplier_id"`
-	Cost         sql.NullString `json:"cost"`
-	SellingPrice sql.NullString `json:"selling_price"`
-	Quantity     sql.NullInt32  `json:"quantity"`
+	ProductID    int32     `json:"product_id"`
+	Name         string    `json:"name"`
+	Description  string    `json:"description"`
+	Category     string    `json:"category"`
+	SupplierID   int32     `json:"supplier_id"`
+	Cost         int64     `json:"cost"`
+	SellingPrice int64     `json:"selling_price"`
+	Quantity     int32     `json:"quantity"`
+	CreatedAt    time.Time `json:"created_at"`
 }
 
 type Sale struct {
-	SaleID     int32          `json:"sale_id"`
-	ProductID  sql.NullInt32  `json:"product_id"`
-	CustomerID sql.NullInt32  `json:"customer_id"`
-	Quantity   sql.NullInt32  `json:"quantity"`
-	SaleDate   sql.NullTime   `json:"sale_date"`
-	TotalPrice sql.NullString `json:"total_price"`
+	SaleID     int32     `json:"sale_id"`
+	ProductID  int32     `json:"product_id"`
+	CustomerID int32     `json:"customer_id"`
+	Quantity   int32     `json:"quantity"`
+	SaleDate   time.Time `json:"sale_date"`
+	TotalPrice int64     `json:"total_price"`
+	CreatedAt  time.Time `json:"created_at"`
 }
 
 type Supplier struct {
-	SupplierID    int32          `json:"supplier_id"`
-	Name          sql.NullString `json:"name"`
-	Address       sql.NullString `json:"address"`
-	ContactNumber sql.NullString `json:"contact_number"`
-	Email         sql.NullString `json:"email"`
+	SupplierID    int32     `json:"supplier_id"`
+	Name          string    `json:"name"`
+	Address       string    `json:"address"`
+	ContactNumber string    `json:"contact_number"`
+	Email         string    `json:"email"`
+	CreatedAt     time.Time `json:"created_at"`
 }

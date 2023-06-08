@@ -18,13 +18,13 @@ INSERT INTO customers (
     email
 ) VALUES (
              $1, $2, $3, $4
-         ) RETURNING customer_id, name, address, contact_number, email
+         ) RETURNING customer_id, name, address, contact_number, email, created_at
 `
 
 type CreateCustomerParams struct {
-	Name          sql.NullString `json:"name"`
+	Name          string         `json:"name"`
 	Address       sql.NullString `json:"address"`
-	ContactNumber sql.NullString `json:"contact_number"`
+	ContactNumber string         `json:"contact_number"`
 	Email         sql.NullString `json:"email"`
 }
 
@@ -42,6 +42,7 @@ func (q *Queries) CreateCustomer(ctx context.Context, arg CreateCustomerParams) 
 		&i.Address,
 		&i.ContactNumber,
 		&i.Email,
+		&i.CreatedAt,
 	)
 	return i, err
 }
@@ -57,7 +58,7 @@ func (q *Queries) DeleteCustomer(ctx context.Context, customerID int32) error {
 }
 
 const getCustomer = `-- name: GetCustomer :one
-SELECT customer_id, name, address, contact_number, email FROM customers
+SELECT customer_id, name, address, contact_number, email, created_at FROM customers
 WHERE customer_id = $1 LIMIT 1
 `
 
@@ -70,12 +71,13 @@ func (q *Queries) GetCustomer(ctx context.Context, customerID int32) (Customer, 
 		&i.Address,
 		&i.ContactNumber,
 		&i.Email,
+		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const listCustomer = `-- name: ListCustomer :many
-SELECT customer_id, name, address, contact_number, email FROM customers
+SELECT customer_id, name, address, contact_number, email, created_at FROM customers
 ORDER BY customer_id
 LIMIT $1
     OFFSET $2
@@ -101,6 +103,7 @@ func (q *Queries) ListCustomer(ctx context.Context, arg ListCustomerParams) ([]C
 			&i.Address,
 			&i.ContactNumber,
 			&i.Email,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -122,14 +125,14 @@ SET  name = $2,
      contact_number = $4,
      email = $5
 WHERE customer_id = $1
-RETURNING customer_id, name, address, contact_number, email
+RETURNING customer_id, name, address, contact_number, email, created_at
 `
 
 type UpdateCustomerParams struct {
 	CustomerID    int32          `json:"customer_id"`
-	Name          sql.NullString `json:"name"`
+	Name          string         `json:"name"`
 	Address       sql.NullString `json:"address"`
-	ContactNumber sql.NullString `json:"contact_number"`
+	ContactNumber string         `json:"contact_number"`
 	Email         sql.NullString `json:"email"`
 }
 
@@ -148,6 +151,7 @@ func (q *Queries) UpdateCustomer(ctx context.Context, arg UpdateCustomerParams) 
 		&i.Address,
 		&i.ContactNumber,
 		&i.Email,
+		&i.CreatedAt,
 	)
 	return i, err
 }

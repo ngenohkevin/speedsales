@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createSupplier = `-- name: CreateSupplier :one
@@ -17,13 +16,13 @@ INSERT INTO suppliers (
                        contact_number
 ) VALUES (
           $1, $2, $3
-) RETURNING supplier_id, name, address, contact_number, email
+) RETURNING supplier_id, name, address, contact_number, email, created_at
 `
 
 type CreateSupplierParams struct {
-	Name          sql.NullString `json:"name"`
-	Address       sql.NullString `json:"address"`
-	ContactNumber sql.NullString `json:"contact_number"`
+	Name          string `json:"name"`
+	Address       string `json:"address"`
+	ContactNumber string `json:"contact_number"`
 }
 
 func (q *Queries) CreateSupplier(ctx context.Context, arg CreateSupplierParams) (Supplier, error) {
@@ -35,6 +34,7 @@ func (q *Queries) CreateSupplier(ctx context.Context, arg CreateSupplierParams) 
 		&i.Address,
 		&i.ContactNumber,
 		&i.Email,
+		&i.CreatedAt,
 	)
 	return i, err
 }
@@ -50,7 +50,7 @@ func (q *Queries) DeleteSupplier(ctx context.Context, supplierID int32) error {
 }
 
 const getSupplier = `-- name: GetSupplier :one
-SELECT supplier_id, name, address, contact_number, email FROM suppliers
+SELECT supplier_id, name, address, contact_number, email, created_at FROM suppliers
 WHERE supplier_id = $1 LIMIT 1
 `
 
@@ -63,12 +63,13 @@ func (q *Queries) GetSupplier(ctx context.Context, supplierID int32) (Supplier, 
 		&i.Address,
 		&i.ContactNumber,
 		&i.Email,
+		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const listSupplier = `-- name: ListSupplier :many
-SELECT supplier_id, name, address, contact_number, email FROM suppliers
+SELECT supplier_id, name, address, contact_number, email, created_at FROM suppliers
 ORDER BY supplier_id
 LIMIT $1
 OFFSET $2
@@ -94,6 +95,7 @@ func (q *Queries) ListSupplier(ctx context.Context, arg ListSupplierParams) ([]S
 			&i.Address,
 			&i.ContactNumber,
 			&i.Email,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -115,15 +117,15 @@ SET  name = $2,
      contact_number = $4,
      email = $5
 WHERE supplier_id = $1
-RETURNING supplier_id, name, address, contact_number, email
+RETURNING supplier_id, name, address, contact_number, email, created_at
 `
 
 type UpdateSupplierParams struct {
-	SupplierID    int32          `json:"supplier_id"`
-	Name          sql.NullString `json:"name"`
-	Address       sql.NullString `json:"address"`
-	ContactNumber sql.NullString `json:"contact_number"`
-	Email         sql.NullString `json:"email"`
+	SupplierID    int32  `json:"supplier_id"`
+	Name          string `json:"name"`
+	Address       string `json:"address"`
+	ContactNumber string `json:"contact_number"`
+	Email         string `json:"email"`
 }
 
 func (q *Queries) UpdateSupplier(ctx context.Context, arg UpdateSupplierParams) (Supplier, error) {
@@ -141,6 +143,7 @@ func (q *Queries) UpdateSupplier(ctx context.Context, arg UpdateSupplierParams) 
 		&i.Address,
 		&i.ContactNumber,
 		&i.Email,
+		&i.CreatedAt,
 	)
 	return i, err
 }

@@ -7,7 +7,7 @@ package db
 
 import (
 	"context"
-	"database/sql"
+	"time"
 )
 
 const createSale = `-- name: CreateSale :one
@@ -16,15 +16,15 @@ INSERT INTO sales (
 
 ) VALUES (
              $1, $2, $3, $4, $5
-         ) RETURNING sale_id, product_id, customer_id, quantity, sale_date, total_price
+         ) RETURNING sale_id, product_id, customer_id, quantity, sale_date, total_price, created_at
 `
 
 type CreateSaleParams struct {
-	ProductID  sql.NullInt32  `json:"product_id"`
-	CustomerID sql.NullInt32  `json:"customer_id"`
-	Quantity   sql.NullInt32  `json:"quantity"`
-	SaleDate   sql.NullTime   `json:"sale_date"`
-	TotalPrice sql.NullString `json:"total_price"`
+	ProductID  int32     `json:"product_id"`
+	CustomerID int32     `json:"customer_id"`
+	Quantity   int32     `json:"quantity"`
+	SaleDate   time.Time `json:"sale_date"`
+	TotalPrice int64     `json:"total_price"`
 }
 
 func (q *Queries) CreateSale(ctx context.Context, arg CreateSaleParams) (Sale, error) {
@@ -43,6 +43,7 @@ func (q *Queries) CreateSale(ctx context.Context, arg CreateSaleParams) (Sale, e
 		&i.Quantity,
 		&i.SaleDate,
 		&i.TotalPrice,
+		&i.CreatedAt,
 	)
 	return i, err
 }
@@ -58,7 +59,7 @@ func (q *Queries) DeleteSale(ctx context.Context, saleID int32) error {
 }
 
 const getSale = `-- name: GetSale :one
-SELECT sale_id, product_id, customer_id, quantity, sale_date, total_price FROM sales
+SELECT sale_id, product_id, customer_id, quantity, sale_date, total_price, created_at FROM sales
 WHERE sale_id = $1 LIMIT 1
 `
 
@@ -72,12 +73,13 @@ func (q *Queries) GetSale(ctx context.Context, saleID int32) (Sale, error) {
 		&i.Quantity,
 		&i.SaleDate,
 		&i.TotalPrice,
+		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const listSale = `-- name: ListSale :many
-SELECT sale_id, product_id, customer_id, quantity, sale_date, total_price FROM sales
+SELECT sale_id, product_id, customer_id, quantity, sale_date, total_price, created_at FROM sales
 ORDER BY sale_id
 LIMIT $1
     OFFSET $2
@@ -104,6 +106,7 @@ func (q *Queries) ListSale(ctx context.Context, arg ListSaleParams) ([]Sale, err
 			&i.Quantity,
 			&i.SaleDate,
 			&i.TotalPrice,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -124,14 +127,14 @@ SET  quantity = $2,
      sale_date = $3,
      total_price = $4
 WHERE sale_id = $1
-RETURNING sale_id, product_id, customer_id, quantity, sale_date, total_price
+RETURNING sale_id, product_id, customer_id, quantity, sale_date, total_price, created_at
 `
 
 type UpdateSaleParams struct {
-	SaleID     int32          `json:"sale_id"`
-	Quantity   sql.NullInt32  `json:"quantity"`
-	SaleDate   sql.NullTime   `json:"sale_date"`
-	TotalPrice sql.NullString `json:"total_price"`
+	SaleID     int32     `json:"sale_id"`
+	Quantity   int32     `json:"quantity"`
+	SaleDate   time.Time `json:"sale_date"`
+	TotalPrice int64     `json:"total_price"`
 }
 
 func (q *Queries) UpdateSale(ctx context.Context, arg UpdateSaleParams) (Sale, error) {
@@ -149,6 +152,7 @@ func (q *Queries) UpdateSale(ctx context.Context, arg UpdateSaleParams) (Sale, e
 		&i.Quantity,
 		&i.SaleDate,
 		&i.TotalPrice,
+		&i.CreatedAt,
 	)
 	return i, err
 }

@@ -13,9 +13,10 @@ const createSupplier = `-- name: CreateSupplier :one
 INSERT INTO suppliers (
                        name,
                        address,
-                       contact_number
+                       contact_number,
+                       email
 ) VALUES (
-          $1, $2, $3
+          $1, $2, $3, $4
 ) RETURNING supplier_id, name, address, contact_number, email, created_at
 `
 
@@ -23,10 +24,16 @@ type CreateSupplierParams struct {
 	Name          string `json:"name"`
 	Address       string `json:"address"`
 	ContactNumber string `json:"contact_number"`
+	Email         string `json:"email"`
 }
 
 func (q *Queries) CreateSupplier(ctx context.Context, arg CreateSupplierParams) (Supplier, error) {
-	row := q.db.QueryRowContext(ctx, createSupplier, arg.Name, arg.Address, arg.ContactNumber)
+	row := q.db.QueryRowContext(ctx, createSupplier,
+		arg.Name,
+		arg.Address,
+		arg.ContactNumber,
+		arg.Email,
+	)
 	var i Supplier
 	err := row.Scan(
 		&i.SupplierID,

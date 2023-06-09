@@ -1,5 +1,7 @@
 ./idea
 .idea
-.env
+app.env
+
+
 
 speedsales.sql

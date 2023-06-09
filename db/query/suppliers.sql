@@ -2,9 +2,10 @@
 INSERT INTO suppliers (
                        name,
                        address,
-                       contact_number
+                       contact_number,
+                       email
 ) VALUES (
-          $1, $2, $3
+          $1, $2, $3, $4
 ) RETURNING *;
 
 

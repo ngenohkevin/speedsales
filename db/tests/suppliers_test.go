@@ -58,3 +58,25 @@ func TestGetProduct(t *testing.T) {
 
 	require.WithinDuration(t, supplier1.CreatedAt, supplier2.CreatedAt, time.Second)
 }
+
+func TestListSupplier(t *testing.T) {
+	//var lastSupplier db.Supplier
+
+	for i := 0; i < 10; i++ {
+		createRandomSuppliers(t)
+	}
+	arg := db.ListSupplierParams{
+		Limit:  5,
+		Offset: 5,
+	}
+
+	supplier, err := testQueries.ListSupplier(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, supplier)
+	require.Len(t, supplier, 5)
+
+	for _, suppliers := range supplier {
+		require.NotEmpty(t, suppliers)
+		//require.Equal(t, lastSupplier.SupplierID, suppliers.SupplierID)
+	}
+}

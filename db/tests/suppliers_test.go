@@ -80,3 +80,16 @@ func TestListSupplier(t *testing.T) {
 		//require.Equal(t, lastSupplier.SupplierID, suppliers.SupplierID)
 	}
 }
+
+func TestUpdateSupplier(t *testing.T) {
+	supplier1 := createRandomSuppliers(t)
+
+	arg := db.UpdateSupplierParams{
+		SupplierID:    supplier1.SupplierID,
+		Name:          utils.RandomName(),
+		Address:       utils.RandomAddress(),
+		ContactNumber: utils.RandomContact(),
+		Email:         utils.RandomEmail(),
+	}
+
+}

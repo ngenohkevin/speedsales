@@ -92,4 +92,8 @@ func TestUpdateSupplier(t *testing.T) {
 		Email:         utils.RandomEmail(),
 	}
 
+	supplier2, err := testQueries.UpdateSupplier(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, supplier2)
+
 }

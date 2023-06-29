@@ -7,7 +7,31 @@ package db
 import (
 	"database/sql"
 	"time"
+
+	"github.com/tabbed/pqtype"
 )
+
+type AcquisitionItemsTrail struct {
+	ItemCode         int64           `json:"item_code"`
+	ItemName         string          `json:"item_name"`
+	OrderQuantity    sql.NullInt64   `json:"order_quantity"`
+	DispatchQuantity sql.NullInt64   `json:"dispatch_quantity"`
+	ReceiveQuantity  sql.NullInt64   `json:"receive_quantity"`
+	OrderID          sql.NullInt64   `json:"order_id"`
+	DispatchID       sql.NullInt64   `json:"dispatch_id"`
+	ReceiveID        sql.NullInt64   `json:"receive_id"`
+	Price            sql.NullInt64   `json:"price"`
+	Cost             sql.NullInt64   `json:"cost"`
+	VatCode          sql.NullString  `json:"vat_code"`
+	Vat              sql.NullFloat64 `json:"vat"`
+}
+
+type CodeTranslator struct {
+	MasterCode string  `json:"master_code"`
+	LinkCode   string  `json:"link_code"`
+	PkgQty     float64 `json:"pkg_qty"`
+	Discount   float64 `json:"discount"`
+}
 
 type Customer struct {
 	CustomerID    int32          `json:"customer_id"`
@@ -18,26 +42,102 @@ type Customer struct {
 	CreatedAt     time.Time      `json:"created_at"`
 }
 
+type Department struct {
+	DepartmentID int32          `json:"department_id"`
+	Category     sql.NullString `json:"category"`
+	SubCategory  sql.NullString `json:"sub_category"`
+	Description  sql.NullString `json:"description"`
+}
+
+type DispatchLog struct {
+	DispatchTime sql.NullTime   `json:"dispatch_time"`
+	DispatchID   int64          `json:"dispatch_id"`
+	Poster       sql.NullString `json:"poster"`
+	Approver     sql.NullString `json:"approver"`
+	OrderNum     sql.NullInt64  `json:"order_num"`
+	Vehicle      sql.NullString `json:"vehicle"`
+}
+
+type OrderLog struct {
+	OrderTime  sql.NullTime   `json:"order_time"`
+	OrderNum   sql.NullInt64  `json:"order_num"`
+	Poster     sql.NullString `json:"poster"`
+	Approver   sql.NullString `json:"approver"`
+	CustomerID sql.NullInt64  `json:"customer_id"`
+	Retailer   sql.NullString `json:"retailer"`
+}
+
 type Product struct {
-	ProductID    int32     `json:"product_id"`
-	Name         string    `json:"name"`
-	Description  string    `json:"description"`
-	Category     string    `json:"category"`
-	SupplierID   int32     `json:"supplier_id"`
-	Cost         int64     `json:"cost"`
-	SellingPrice int64     `json:"selling_price"`
-	Quantity     int32     `json:"quantity"`
-	CreatedAt    time.Time `json:"created_at"`
+	ProductID      int32     `json:"product_id"`
+	Name           string    `json:"name"`
+	Description    string    `json:"description"`
+	Category       string    `json:"category"`
+	DepartmentID   int32     `json:"department_id"`
+	SupplierID     int64     `json:"supplier_id"`
+	Cost           int64     `json:"cost"`
+	SellingPrice   int64     `json:"selling_price"`
+	WholesalePrice int64     `json:"wholesale_price"`
+	MinMargin      float64   `json:"min_margin"`
+	Quantity       int64     `json:"quantity"`
+	CreatedAt      time.Time `json:"created_at"`
+}
+
+type ReceiveLog struct {
+	ReceiveTime sql.NullTime   `json:"receive_time"`
+	ReceiveID   int64          `json:"receive_id"`
+	Poster      sql.NullString `json:"poster"`
+	Approver    sql.NullString `json:"approver"`
+	DispatchID  sql.NullInt64  `json:"dispatch_id"`
+	OrderNum    sql.NullInt64  `json:"order_num"`
 }
 
 type Sale struct {
-	SaleID     int32     `json:"sale_id"`
-	ProductID  int32     `json:"product_id"`
-	CustomerID int32     `json:"customer_id"`
-	Quantity   int32     `json:"quantity"`
-	SaleDate   time.Time `json:"sale_date"`
-	TotalPrice int64     `json:"total_price"`
-	CreatedAt  time.Time `json:"created_at"`
+	ReceiptNum       int64          `json:"receipt_num"`
+	TillNum          sql.NullInt64  `json:"till_num"`
+	TxnTime          time.Time      `json:"txn_time"`
+	ProductID        int64          `json:"product_id"`
+	ItemName         sql.NullString `json:"item_name"`
+	Price            float64        `json:"price"`
+	Cost             float64        `json:"cost"`
+	Quantity         float64        `json:"quantity"`
+	VatCode          sql.NullString `json:"vat_code"`
+	HsCode           sql.NullString `json:"hs_code"`
+	VAT              float64        `json:"VAT"`
+	BatchCode        sql.NullString `json:"batch_code"`
+	SerialCode       sql.NullString `json:"serial_code"`
+	SerialCodeReturn sql.NullString `json:"serial_code_return"`
+	ServedBy         sql.NullString `json:"served_by"`
+	ApprovedBy       sql.NullString `json:"approved_by"`
+	State            string         `json:"state"`
+}
+
+type SalesTill struct {
+	TillNum      int64                 `json:"till_num"`
+	Teller       sql.NullString        `json:"teller"`
+	Supervisor   sql.NullString        `json:"supervisor"`
+	Branch       sql.NullString        `json:"branch"`
+	OpenTime     time.Time             `json:"open_time"`
+	OpenCash     float64               `json:"open_cash"`
+	CloseTime    sql.NullTime          `json:"close_time"`
+	CloseCash    sql.NullFloat64       `json:"close_cash"`
+	CloseSummary pqtype.NullRawMessage `json:"close_summary"`
+}
+
+type Salestrace struct {
+	SaleID         int32                 `json:"sale_id"`
+	CreatedAt      time.Time             `json:"created_at"`
+	ReceiptNum     int64                 `json:"receipt_num"`
+	TillNum        sql.NullInt64         `json:"till_num"`
+	SmartCard      int32                 `json:"smart_card"`
+	CustomerID     int64                 `json:"customer_id"`
+	Quantity       int64                 `json:"quantity"`
+	SaleTime       time.Time             `json:"sale_time"`
+	TotalPrice     int64                 `json:"total_price"`
+	CustomerNum    sql.NullInt64         `json:"customer_num"`
+	CashPaid       float64               `json:"cash_paid"`
+	PaymentSummary pqtype.NullRawMessage `json:"payment_summary"`
+	Change         float64               `json:"change"`
+	State          sql.NullString        `json:"state"`
 }
 
 type Supplier struct {
@@ -47,4 +147,38 @@ type Supplier struct {
 	ContactNumber string    `json:"contact_number"`
 	Email         string    `json:"email"`
 	CreatedAt     time.Time `json:"created_at"`
+}
+
+type User struct {
+	UserID      int32                 `json:"user_id"`
+	Username    sql.NullString        `json:"username"`
+	Branch      sql.NullString        `json:"branch"`
+	StkLocation sql.NullString        `json:"stk_location"`
+	Reset       sql.NullString        `json:"reset"`
+	TillNum     sql.NullInt64         `json:"till_num"`
+	Rights      pqtype.NullRawMessage `json:"rights"`
+	IsActive    sql.NullBool          `json:"is_active"`
+}
+
+type Vehicle struct {
+	VehicleID       int32                 `json:"vehicle_id"`
+	VehicleName     sql.NullString        `json:"vehicle_name"`
+	RegistrationNum string                `json:"registration_num"`
+	VinNum          sql.NullString        `json:"vin_num"`
+	ManufactureDate sql.NullTime          `json:"manufacture_date"`
+	Mileage         sql.NullFloat64       `json:"mileage"`
+	LastMileageRead time.Time             `json:"last_mileage_read"`
+	InsuranceExpiry time.Time             `json:"insurance_expiry"`
+	Checklist       pqtype.NullRawMessage `json:"checklist"`
+	State           sql.NullString        `json:"state"`
+}
+
+type VehicleActivityLog struct {
+	ActivityID   int64                 `json:"activity_id"`
+	ActivityTime time.Time             `json:"activity_time"`
+	DoneBy       sql.NullString        `json:"done_by"`
+	VehicleID    int32                 `json:"vehicle_id"`
+	ApprovedBy   sql.NullString        `json:"approved_by"`
+	Checklist    pqtype.NullRawMessage `json:"checklist"`
+	Notation     sql.NullString        `json:"notation"`
 }

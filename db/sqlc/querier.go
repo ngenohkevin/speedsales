@@ -9,26 +9,11 @@ import (
 )
 
 type Querier interface {
-	CreateCustomer(ctx context.Context, arg CreateCustomerParams) (Customer, error)
-	CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error)
-	CreateSale(ctx context.Context, arg CreateSaleParams) (Sale, error)
-	CreateSupplier(ctx context.Context, arg CreateSupplierParams) (Supplier, error)
-	DeleteCustomer(ctx context.Context, customerID int32) error
-	DeleteProduct(ctx context.Context, productID int32) error
-	DeleteSale(ctx context.Context, saleID int32) error
-	DeleteSupplier(ctx context.Context, supplierID int32) error
-	GetCustomer(ctx context.Context, customerID int32) (Customer, error)
-	GetProduct(ctx context.Context, productID int32) (Product, error)
-	GetSale(ctx context.Context, saleID int32) (Sale, error)
-	GetSupplier(ctx context.Context, supplierID int32) (Supplier, error)
-	ListCustomer(ctx context.Context, arg ListCustomerParams) ([]Customer, error)
-	ListProduct(ctx context.Context, arg ListProductParams) ([]Product, error)
-	ListSale(ctx context.Context, arg ListSaleParams) ([]Sale, error)
-	ListSupplier(ctx context.Context, arg ListSupplierParams) ([]Supplier, error)
-	UpdateCustomer(ctx context.Context, arg UpdateCustomerParams) (Customer, error)
-	UpdateProduct(ctx context.Context, arg UpdateProductParams) (Product, error)
-	UpdateSale(ctx context.Context, arg UpdateSaleParams) (Sale, error)
-	UpdateSupplier(ctx context.Context, arg UpdateSupplierParams) (Supplier, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteUsers(ctx context.Context, userID int32) error
+	GetUser(ctx context.Context, userID int32) (User, error)
+	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)

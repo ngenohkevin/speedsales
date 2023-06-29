@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -29,8 +30,6 @@ func RandomString(n int) string {
 }
 
 func RandomWord(n int) string {
-	rand.Seed(time.Now().UnixNano())
-
 	words := make([]string, n)
 
 	for i := 0; i < n; i++ {
@@ -45,6 +44,42 @@ func RandomWord(n int) string {
 		words[i] = string(word)
 	}
 	return strings.Join(words, " ")
+}
+
+func RandomJSON(n int) json.RawMessage {
+	data := make(map[string]interface{})
+
+	for i := 0; i < n; i++ {
+		key := fmt.Sprintf("key%d", i)
+		value := RandomValue()
+		data[key] = value
+	}
+
+	jsonData, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		// Handle the error appropriately, such as logging or returning a default value.
+		// In this case, we will log the error and return an empty JSON object.
+		fmt.Println("Error generating random JSON:", err)
+		return json.RawMessage("{}")
+	}
+
+	return json.RawMessage(jsonData)
+}
+
+func RandomValue() interface{} {
+	valueType := rand.Intn(3)
+
+	switch valueType {
+	case 0:
+		return RandomInt(0, 100)
+	case 1:
+		return rand.Float64() * 100
+	default:
+		return RandomWord(1)
+	}
+}
+func RandomBool() bool {
+	return rand.Intn(2) == 0
 }
 
 func RandomName() string {

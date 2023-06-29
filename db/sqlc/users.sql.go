@@ -137,8 +137,9 @@ SET username = $2,
     branch = $3,
     stk_location = $4,
     reset = $5,
-    rights = $6,
-    is_active = $7
+    till_num =$6,
+    rights = $7,
+    is_active = $8
 WHERE user_id = $1
 RETURNING user_id, username, branch, stk_location, reset, till_num, rights, is_active
 `
@@ -149,6 +150,7 @@ type UpdateUserParams struct {
 	Branch      sql.NullString        `json:"branch"`
 	StkLocation sql.NullString        `json:"stk_location"`
 	Reset       sql.NullString        `json:"reset"`
+	TillNum     sql.NullInt64         `json:"till_num"`
 	Rights      pqtype.NullRawMessage `json:"rights"`
 	IsActive    sql.NullBool          `json:"is_active"`
 }
@@ -160,6 +162,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		arg.Branch,
 		arg.StkLocation,
 		arg.Reset,
+		arg.TillNum,
 		arg.Rights,
 		arg.IsActive,
 	)

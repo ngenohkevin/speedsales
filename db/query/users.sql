@@ -23,8 +23,9 @@ SET username = $2,
     branch = $3,
     stk_location = $4,
     reset = $5,
-    rights = $6,
-    is_active = $7
+    till_num =$6,
+    rights = $7,
+    is_active = $8
 WHERE user_id = $1
 RETURNING *;
 

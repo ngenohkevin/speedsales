@@ -56,6 +56,7 @@ func TestCreateUsers(t *testing.T) {
 	createRandomUsers(t)
 }
 
+// tests Gets a new user
 func TestGetUser(t *testing.T) {
 	user1 := createRandomUsers(t)
 	user2, err := testQueries.GetUser(context.Background(), user1.UserID)

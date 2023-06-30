@@ -10,6 +10,7 @@ import (
 	"testing"
 )
 
+// The Tests create a new user by using random values passed
 func createRandomUsers(t *testing.T) db.User {
 	arg := db.CreateUserParams{
 		Username:    utils.NullStrings(utils.RandomName()),

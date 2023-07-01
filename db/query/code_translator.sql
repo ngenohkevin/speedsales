@@ -15,3 +15,10 @@ WHERE master_code = $1
 ORDER BY link_code
 LIMIT $2
 OFFSET $3;
+
+-- name: UpdateCodeTranslator :one
+UPDATE code_translator
+SET  pkg_qty = $2,
+     discount = $3
+WHERE master_code = $1
+RETURNING *;

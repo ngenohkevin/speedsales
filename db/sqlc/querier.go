@@ -9,14 +9,19 @@ import (
 )
 
 type Querier interface {
+	CreateCodeTranslator(ctx context.Context, arg CreateCodeTranslatorParams) (CodeTranslator, error)
 	CreateSupplier(ctx context.Context, arg CreateSupplierParams) (Supplier, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteCodeTranslator(ctx context.Context, masterCode string) error
 	DeleteSupplier(ctx context.Context, supplierID int32) error
 	DeleteUsers(ctx context.Context, userID int32) error
+	GetCodeTranslator(ctx context.Context, masterCode string) (CodeTranslator, error)
 	GetSupplier(ctx context.Context, supplierID int32) (Supplier, error)
 	GetUser(ctx context.Context, userID int32) (User, error)
+	ListCodeTranslator(ctx context.Context, arg ListCodeTranslatorParams) ([]CodeTranslator, error)
 	ListSuppliers(ctx context.Context, arg ListSuppliersParams) ([]Supplier, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdateCodeTranslator(ctx context.Context, arg UpdateCodeTranslatorParams) (CodeTranslator, error)
 	UpdateSupplier(ctx context.Context, arg UpdateSupplierParams) (Supplier, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }

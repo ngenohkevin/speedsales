@@ -3,4 +3,8 @@ INSERT INTO code_translator (
   master_code, link_code, pkg_qty, discount
 ) VALUES (
   $1, $2, $3, $4
-)
+) RETURNING *;
+
+-- name: GetCodeTranslator :one
+SELECT * FROM code_translator
+WHERE master_code = $1 LIMIT 1;

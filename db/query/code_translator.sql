@@ -22,3 +22,7 @@ SET  pkg_qty = $2,
      discount = $3
 WHERE master_code = $1
 RETURNING *;
+
+-- name: DeleteCodeTranslator :exec
+DELETE FROM code_translator
+WHERE master_code = $1;

@@ -9,10 +9,15 @@ import (
 )
 
 type Querier interface {
+	CreateSupplier(ctx context.Context, arg CreateSupplierParams) (Supplier, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteSupplier(ctx context.Context, supplierID int32) error
 	DeleteUsers(ctx context.Context, userID int32) error
+	GetSupplier(ctx context.Context, supplierID int32) (Supplier, error)
 	GetUser(ctx context.Context, userID int32) (User, error)
+	ListSuppliers(ctx context.Context, arg ListSuppliersParams) ([]Supplier, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdateSupplier(ctx context.Context, arg UpdateSupplierParams) (Supplier, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
 

@@ -8,3 +8,10 @@ INSERT INTO code_translator (
 -- name: GetCodeTranslator :one
 SELECT * FROM code_translator
 WHERE master_code = $1 LIMIT 1;
+
+-- name: ListCodeTranslator :many
+SELECT * FROM code_translator
+WHERE master_code = $1
+ORDER BY link_code
+LIMIT $2
+OFFSET $3;

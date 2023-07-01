@@ -2,6 +2,7 @@ package tests
 
 import (
 	"context"
+	"database/sql"
 	db "github.com/ngenohkevin/speedsales/db/sqlc"
 	"github.com/ngenohkevin/speedsales/utils"
 	"github.com/stretchr/testify/require"
@@ -73,3 +74,36 @@ func TestUpdateSupplier(t *testing.T) {
 	require.Equal(t, arg.Email, supplier2.Email)
 }
 
+func TestListSuppliers(t *testing.T) {
+	var lastSupplier db.Supplier
+
+	for i := 0; i < 10; i++ {
+		lastSupplier = createRandomSuppliers(t)
+	}
+	arg := db.ListSuppliersParams{
+		SupplierID: lastSupplier.SupplierID,
+		Limit:      5,
+		Offset:     0,
+	}
+	suppliers, err := testQueries.ListSuppliers(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, suppliers)
+
+	for _, supplier := range suppliers {
+		require.NotEmpty(t, supplier)
+		require.Equal(t, lastSupplier.SupplierID, supplier.SupplierID)
+	}
+}
+func TestDeleteSupplier(t *testing.T) {
+	supplier1 := createRandomSuppliers(t)
+
+	err := testQueries.DeleteSupplier(context.Background(), supplier1.SupplierID)
+	require.NoError(t, err)
+
+	supplier2, err := testQueries.GetSupplier(context.Background(), supplier1.SupplierID)
+	require.Error(t, err)
+
+	require.EqualError(t, err, sql.ErrNoRows.Error())
+
+	require.Empty(t, supplier2)
+}

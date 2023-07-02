@@ -10,7 +10,7 @@ func createCodeTranslator(t *testing.T) db.CodeTranslator {
 	arg := db.CreateCodeTranslatorParams{
 		MasterCode: utils.RandomAnyString(),
 		LinkCode:   utils.RandomAnyString(),
-		PkgQty:     0,
-		Discount:   0,
+		PkgQty:     utils.RandomFloat(),
+		Discount:   utils.RandomFloat(),
 	}
 }

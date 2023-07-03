@@ -2,6 +2,7 @@ package tests
 
 import (
 	"context"
+	"database/sql"
 	db "github.com/ngenohkevin/speedsales/db/sqlc"
 	"github.com/ngenohkevin/speedsales/utils"
 	"github.com/stretchr/testify/require"
@@ -63,4 +64,37 @@ func TestUpdateDepartment(t *testing.T) {
 	require.Equal(t, arg.Category, department2.Category)
 	require.Equal(t, arg.SubCategory, department2.SubCategory)
 	require.Equal(t, arg.Description, department2.Description)
+}
+
+func TestListDepartments(t *testing.T) {
+	var lastDepartment db.Department
+
+	for i := 0; i < 10; i++ {
+		lastDepartment = createRandomDepartment(t)
+	}
+	arg := db.ListDepartmentParams{
+		DepartmentID: lastDepartment.DepartmentID,
+		Limit:        5,
+		Offset:       0,
+	}
+	departments, err := testQueries.ListDepartment(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, departments)
+
+	for _, department := range departments {
+		require.NotEmpty(t, department)
+		require.Equal(t, lastDepartment.DepartmentID, department.DepartmentID)
+	}
+}
+
+func TestDeleteDepartment(t *testing.T) {
+	department1 := createRandomDepartment(t)
+
+	err := testQueries.DeleteDepartment(context.Background(), department1.DepartmentID)
+	require.NoError(t, err)
+
+	department2, err := testQueries.GetDepartment(context.Background(), department1.DepartmentID)
+	require.Error(t, err)
+	require.EqualError(t, err, sql.ErrNoRows.Error())
+	require.Empty(t, department2)
 }

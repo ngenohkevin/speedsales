@@ -45,3 +45,22 @@ func TestGetDepartment(t *testing.T) {
 	require.Equal(t, department1.Description, department2.Description)
 
 }
+
+func TestUpdateDepartment(t *testing.T) {
+	department1 := createRandomDepartment(t)
+
+	arg := db.UpdateDepartmentParams{
+		DepartmentID: department1.DepartmentID,
+		Category:     utils.NullStrings(utils.RandomAnyString()),
+		SubCategory:  utils.NullStrings(utils.RandomAnyString()),
+		Description:  utils.NullStrings(utils.RandomDesc()),
+	}
+	department2, err := testQueries.UpdateDepartment(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, department2)
+
+	require.Equal(t, department1.DepartmentID, department2.DepartmentID)
+	require.Equal(t, arg.Category, department2.Category)
+	require.Equal(t, arg.SubCategory, department2.SubCategory)
+	require.Equal(t, arg.Description, department2.Description)
+}

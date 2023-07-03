@@ -31,3 +31,17 @@ func createRandomDepartment(t *testing.T) db.Department {
 func TestCreateDepartment(t *testing.T) {
 	createRandomDepartment(t)
 }
+
+func TestGetDepartment(t *testing.T) {
+	department1 := createRandomDepartment(t)
+
+	department2, err := testQueries.GetDepartment(context.Background(), department1.DepartmentID)
+	require.NoError(t, err)
+	require.NotEmpty(t, department2)
+
+	require.Equal(t, department1.DepartmentID, department2.DepartmentID)
+	require.Equal(t, department1.Category, department2.Category)
+	require.Equal(t, department1.SubCategory, department2.SubCategory)
+	require.Equal(t, department1.Description, department2.Description)
+
+}

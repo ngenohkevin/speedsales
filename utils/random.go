@@ -108,8 +108,11 @@ func RandomDescription() string {
 	return RandomWord(6)
 }
 func RandomAnyString() string {
-	return RandomString(6)
+	return RandomString(8)
 }
 func RandomAnyInt() int {
 	return RandomInt(7, 8)
+}
+func RandomDesc() string {
+	return RandomString(25)
 }

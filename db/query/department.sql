@@ -2,7 +2,7 @@
 INSERT INTO department (category, sub_category, description)
 VALUES (
  $1, $2, $3
-) RETURNING *
+) RETURNING *;
 
 -- name: GetDepartment :one
 SELECT * FROM department
@@ -15,7 +15,7 @@ ORDER BY category
 LIMIT $2
 OFFSET $3;
 
--- name UpdateDepartment :one
+-- name: UpdateDepartment :one
 UPDATE department
 SET category = $2,
     sub_category = $3,

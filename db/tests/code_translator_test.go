@@ -2,6 +2,7 @@ package tests
 
 import (
 	"context"
+	"database/sql"
 	db "github.com/ngenohkevin/speedsales/db/sqlc"
 	"github.com/ngenohkevin/speedsales/utils"
 	"github.com/stretchr/testify/require"
@@ -82,4 +83,19 @@ func TestListCodeTranslator(t *testing.T) {
 		require.NotEmpty(t, translator)
 		require.Equal(t, lastCodeTranslator.MasterCode, translator.MasterCode)
 	}
+}
+
+func TestDeleteCodeTranslator(t *testing.T) {
+	codeTranslator1 := createRandomCodeTranslator(t)
+
+	err := testQueries.DeleteCodeTranslator(context.Background(), codeTranslator1.MasterCode)
+	require.NoError(t, err)
+
+	codeTranslator2, err := testQueries.GetCodeTranslator(context.Background(), codeTranslator1.MasterCode)
+	require.Error(t, err)
+
+	require.EqualError(t, err, sql.ErrNoRows.Error())
+
+	require.Empty(t, codeTranslator2)
+
 }

@@ -23,3 +23,6 @@ SET category = $2,
 WHERE department_id = $1
 RETURNING *;
 
+-- name: DeleteDepartment :exec
+DELETE FROM department
+WHERE department_id = $1;

@@ -28,3 +28,7 @@ SET name = $2,
     quantity = $9
 WHERE product_id = $1
 RETURNING *;
+
+-- name: DeleteProducts :exec
+DELETE FROM products
+WHERE product_id = $1;

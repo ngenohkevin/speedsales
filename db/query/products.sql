@@ -9,3 +9,9 @@ INSERT INTO products (
 SELECT * FROM products
 WHERE product_id = $1 LIMIT 1;
 
+-- name: ListProducts :many
+SELECT * FROM products
+WHERE product_id = $1
+ORDER BY name
+LIMIT $2
+OFFSET $3;

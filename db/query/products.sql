@@ -15,3 +15,16 @@ WHERE product_id = $1
 ORDER BY name
 LIMIT $2
 OFFSET $3;
+
+-- name: UpdateProducts :one
+UPDATE products
+SET name = $2,
+    description = $3,
+    category = $4,
+    cost = $5,
+    selling_price = $6,
+    wholesale_price = $7,
+    min_margin = $8,
+    quantity = $9
+WHERE product_id = $1
+RETURNING *;

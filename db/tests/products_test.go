@@ -27,3 +27,7 @@ func createRandomProduct(t *testing.T) db.Product {
 
 	return product
 }
+
+func TestCreateProduct(t *testing.T) {
+	createRandomUsers(t)
+}

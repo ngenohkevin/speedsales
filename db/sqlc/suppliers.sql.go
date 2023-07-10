@@ -25,7 +25,7 @@ type CreateSupplierParams struct {
 }
 
 func (q *Queries) CreateSupplier(ctx context.Context, arg CreateSupplierParams) (Supplier, error) {
-	row := q.db.QueryRowContext(ctx, createSupplier,
+	row := q.db.QueryRow(ctx, createSupplier,
 		arg.Name,
 		arg.Address,
 		arg.ContactNumber,
@@ -49,7 +49,7 @@ WHERE supplier_id = $1
 `
 
 func (q *Queries) DeleteSupplier(ctx context.Context, supplierID int32) error {
-	_, err := q.db.ExecContext(ctx, deleteSupplier, supplierID)
+	_, err := q.db.Exec(ctx, deleteSupplier, supplierID)
 	return err
 }
 
@@ -59,7 +59,7 @@ WHERE supplier_id = $1 LIMIT 1
 `
 
 func (q *Queries) GetSupplier(ctx context.Context, supplierID int32) (Supplier, error) {
-	row := q.db.QueryRowContext(ctx, getSupplier, supplierID)
+	row := q.db.QueryRow(ctx, getSupplier, supplierID)
 	var i Supplier
 	err := row.Scan(
 		&i.SupplierID,
@@ -87,7 +87,7 @@ type ListSuppliersParams struct {
 }
 
 func (q *Queries) ListSuppliers(ctx context.Context, arg ListSuppliersParams) ([]Supplier, error) {
-	rows, err := q.db.QueryContext(ctx, listSuppliers, arg.SupplierID, arg.Limit, arg.Offset)
+	rows, err := q.db.Query(ctx, listSuppliers, arg.SupplierID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -106,9 +106,6 @@ func (q *Queries) ListSuppliers(ctx context.Context, arg ListSuppliersParams) ([
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -135,7 +132,7 @@ type UpdateSupplierParams struct {
 }
 
 func (q *Queries) UpdateSupplier(ctx context.Context, arg UpdateSupplierParams) (Supplier, error) {
-	row := q.db.QueryRowContext(ctx, updateSupplier,
+	row := q.db.QueryRow(ctx, updateSupplier,
 		arg.SupplierID,
 		arg.Name,
 		arg.Address,

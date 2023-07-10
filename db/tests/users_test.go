@@ -2,7 +2,6 @@ package tests
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	db "github.com/ngenohkevin/speedsales/db/sqlc"
 	"github.com/ngenohkevin/speedsales/utils"
@@ -18,7 +17,7 @@ func createRandomUsers(t *testing.T) db.User {
 		StkLocation: utils.NullStrings(utils.RandomAnyString()),
 		Reset:       utils.NullStrings(utils.RandomAnyString()),
 		TillNum:     utils.NullInt64(int64(utils.RandomAnyInt())),
-		Rights:      utils.NullRawMessage(utils.RandomJSON(2)),
+		Rights:      utils.RandomJSON(2),
 		IsActive:    utils.NullBool(utils.RandomBool()),
 	}
 	users, err := testQueries.CreateUser(context.Background(), arg)
@@ -34,9 +33,9 @@ func createRandomUsers(t *testing.T) db.User {
 	//By comparing maps instead of raw JSON string, differences caused by formatting and or spacing is eliminated ensuring a valid comparison
 	expectedRights := make(map[string]interface{})
 	actualRights := make(map[string]interface{})
-	err = json.Unmarshal(arg.Rights.RawMessage, &expectedRights)
+	err = json.Unmarshal(arg.Rights, &expectedRights)
 	require.NoError(t, err)
-	err = json.Unmarshal(users.Rights.RawMessage, &actualRights)
+	err = json.Unmarshal(users.Rights, &actualRights)
 	require.NoError(t, err)
 
 	require.Equal(t, arg.Username, users.Username)
@@ -64,9 +63,9 @@ func TestGetUser(t *testing.T) {
 
 	expectedRights := make(map[string]interface{})
 	actualRights := make(map[string]interface{})
-	err = json.Unmarshal(user1.Rights.RawMessage, &expectedRights)
+	err = json.Unmarshal(user1.Rights, &expectedRights)
 	require.NoError(t, err)
-	err = json.Unmarshal(user2.Rights.RawMessage, &actualRights)
+	err = json.Unmarshal(user2.Rights, &actualRights)
 	require.NoError(t, err)
 
 	require.Equal(t, user1.UserID, user2.UserID)
@@ -88,7 +87,7 @@ func TestUpdateUser(t *testing.T) {
 		StkLocation: utils.NullStrings(utils.RandomAnyString()),
 		Reset:       utils.NullStrings(utils.RandomAnyString()),
 		TillNum:     utils.NullInt64(int64(utils.RandomAnyInt())),
-		Rights:      utils.NullRawMessage(utils.RandomJSON(2)),
+		Rights:      utils.RandomJSON(4),
 		IsActive:    utils.NullBool(utils.RandomBool()),
 	}
 	user2, err := testQueries.UpdateUser(context.Background(), arg)
@@ -97,9 +96,9 @@ func TestUpdateUser(t *testing.T) {
 
 	expectedRights := make(map[string]interface{})
 	actualRights := make(map[string]interface{})
-	err = json.Unmarshal(arg.Rights.RawMessage, &expectedRights)
+	err = json.Unmarshal(arg.Rights, &expectedRights)
 	require.NoError(t, err)
-	err = json.Unmarshal(user2.Rights.RawMessage, &actualRights)
+	err = json.Unmarshal(user2.Rights, &actualRights)
 	require.NoError(t, err)
 
 	require.Equal(t, user1.UserID, user2.UserID)
@@ -141,7 +140,7 @@ func TestDeleteUser(t *testing.T) {
 	user2, err := testQueries.GetUser(context.Background(), user1.UserID)
 	require.Error(t, err)
 
-	require.EqualError(t, err, sql.ErrNoRows.Error())
+	require.EqualError(t, err, utils.ErrRecordNotFound.Error())
 
 	require.Empty(t, user2)
 }

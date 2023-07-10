@@ -2,7 +2,6 @@ package tests
 
 import (
 	"context"
-	"database/sql"
 	db "github.com/ngenohkevin/speedsales/db/sqlc"
 	"github.com/ngenohkevin/speedsales/utils"
 	"github.com/stretchr/testify/require"
@@ -94,7 +93,7 @@ func TestDeleteCodeTranslator(t *testing.T) {
 	codeTranslator2, err := testQueries.GetCodeTranslator(context.Background(), codeTranslator1.MasterCode)
 	require.Error(t, err)
 
-	require.EqualError(t, err, sql.ErrNoRows.Error())
+	require.EqualError(t, err, utils.ErrRecordNotFound.Error())
 
 	require.Empty(t, codeTranslator2)
 

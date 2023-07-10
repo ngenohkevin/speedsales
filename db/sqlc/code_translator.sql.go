@@ -25,7 +25,7 @@ type CreateCodeTranslatorParams struct {
 }
 
 func (q *Queries) CreateCodeTranslator(ctx context.Context, arg CreateCodeTranslatorParams) (CodeTranslator, error) {
-	row := q.db.QueryRowContext(ctx, createCodeTranslator,
+	row := q.db.QueryRow(ctx, createCodeTranslator,
 		arg.MasterCode,
 		arg.LinkCode,
 		arg.PkgQty,
@@ -47,7 +47,7 @@ WHERE master_code = $1
 `
 
 func (q *Queries) DeleteCodeTranslator(ctx context.Context, masterCode string) error {
-	_, err := q.db.ExecContext(ctx, deleteCodeTranslator, masterCode)
+	_, err := q.db.Exec(ctx, deleteCodeTranslator, masterCode)
 	return err
 }
 
@@ -57,7 +57,7 @@ WHERE master_code = $1 LIMIT 1
 `
 
 func (q *Queries) GetCodeTranslator(ctx context.Context, masterCode string) (CodeTranslator, error) {
-	row := q.db.QueryRowContext(ctx, getCodeTranslator, masterCode)
+	row := q.db.QueryRow(ctx, getCodeTranslator, masterCode)
 	var i CodeTranslator
 	err := row.Scan(
 		&i.MasterCode,
@@ -83,7 +83,7 @@ type ListCodeTranslatorParams struct {
 }
 
 func (q *Queries) ListCodeTranslator(ctx context.Context, arg ListCodeTranslatorParams) ([]CodeTranslator, error) {
-	rows, err := q.db.QueryContext(ctx, listCodeTranslator, arg.MasterCode, arg.Limit, arg.Offset)
+	rows, err := q.db.Query(ctx, listCodeTranslator, arg.MasterCode, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -100,9 +100,6 @@ func (q *Queries) ListCodeTranslator(ctx context.Context, arg ListCodeTranslator
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -125,7 +122,7 @@ type UpdateCodeTranslatorParams struct {
 }
 
 func (q *Queries) UpdateCodeTranslator(ctx context.Context, arg UpdateCodeTranslatorParams) (CodeTranslator, error) {
-	row := q.db.QueryRowContext(ctx, updateCodeTranslator, arg.MasterCode, arg.PkgQty, arg.Discount)
+	row := q.db.QueryRow(ctx, updateCodeTranslator, arg.MasterCode, arg.PkgQty, arg.Discount)
 	var i CodeTranslator
 	err := row.Scan(
 		&i.MasterCode,

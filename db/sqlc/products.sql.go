@@ -31,7 +31,7 @@ type CreateProductsParams struct {
 }
 
 func (q *Queries) CreateProducts(ctx context.Context, arg CreateProductsParams) (Product, error) {
-	row := q.db.QueryRowContext(ctx, createProducts,
+	row := q.db.QueryRow(ctx, createProducts,
 		arg.Name,
 		arg.Description,
 		arg.Category,
@@ -67,7 +67,7 @@ WHERE product_id = $1
 `
 
 func (q *Queries) DeleteProducts(ctx context.Context, productID int32) error {
-	_, err := q.db.ExecContext(ctx, deleteProducts, productID)
+	_, err := q.db.Exec(ctx, deleteProducts, productID)
 	return err
 }
 
@@ -77,7 +77,7 @@ WHERE product_id = $1 LIMIT 1
 `
 
 func (q *Queries) GetProducts(ctx context.Context, productID int32) (Product, error) {
-	row := q.db.QueryRowContext(ctx, getProducts, productID)
+	row := q.db.QueryRow(ctx, getProducts, productID)
 	var i Product
 	err := row.Scan(
 		&i.ProductID,
@@ -111,7 +111,7 @@ type ListProductsParams struct {
 }
 
 func (q *Queries) ListProducts(ctx context.Context, arg ListProductsParams) ([]Product, error) {
-	rows, err := q.db.QueryContext(ctx, listProducts, arg.ProductID, arg.Limit, arg.Offset)
+	rows, err := q.db.Query(ctx, listProducts, arg.ProductID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -136,9 +136,6 @@ func (q *Queries) ListProducts(ctx context.Context, arg ListProductsParams) ([]P
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -173,7 +170,7 @@ type UpdateProductsParams struct {
 }
 
 func (q *Queries) UpdateProducts(ctx context.Context, arg UpdateProductsParams) (Product, error) {
-	row := q.db.QueryRowContext(ctx, updateProducts,
+	row := q.db.QueryRow(ctx, updateProducts,
 		arg.ProductID,
 		arg.Name,
 		arg.Description,

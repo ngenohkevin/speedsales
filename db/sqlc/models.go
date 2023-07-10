@@ -5,25 +5,24 @@
 package db
 
 import (
-	"database/sql"
 	"time"
 
-	"github.com/tabbed/pqtype"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type AcquisitionItemsTrail struct {
-	ItemCode         int64           `json:"item_code"`
-	ItemName         string          `json:"item_name"`
-	OrderQuantity    sql.NullInt64   `json:"order_quantity"`
-	DispatchQuantity sql.NullInt64   `json:"dispatch_quantity"`
-	ReceiveQuantity  sql.NullInt64   `json:"receive_quantity"`
-	OrderID          sql.NullInt64   `json:"order_id"`
-	DispatchID       sql.NullInt64   `json:"dispatch_id"`
-	ReceiveID        sql.NullInt64   `json:"receive_id"`
-	Price            sql.NullInt64   `json:"price"`
-	Cost             sql.NullInt64   `json:"cost"`
-	VatCode          sql.NullString  `json:"vat_code"`
-	Vat              sql.NullFloat64 `json:"vat"`
+	ItemCode         int64         `json:"item_code"`
+	ItemName         string        `json:"item_name"`
+	OrderQuantity    pgtype.Int8   `json:"order_quantity"`
+	DispatchQuantity pgtype.Int8   `json:"dispatch_quantity"`
+	ReceiveQuantity  pgtype.Int8   `json:"receive_quantity"`
+	OrderID          pgtype.Int8   `json:"order_id"`
+	DispatchID       pgtype.Int8   `json:"dispatch_id"`
+	ReceiveID        pgtype.Int8   `json:"receive_id"`
+	Price            pgtype.Int8   `json:"price"`
+	Cost             pgtype.Int8   `json:"cost"`
+	VatCode          pgtype.Text   `json:"vat_code"`
+	Vat              pgtype.Float8 `json:"vat"`
 }
 
 type CodeTranslator struct {
@@ -34,37 +33,37 @@ type CodeTranslator struct {
 }
 
 type Customer struct {
-	CustomerID    int32          `json:"customer_id"`
-	Name          string         `json:"name"`
-	Address       sql.NullString `json:"address"`
-	ContactNumber string         `json:"contact_number"`
-	Email         sql.NullString `json:"email"`
-	CreatedAt     time.Time      `json:"created_at"`
+	CustomerID    int32       `json:"customer_id"`
+	Name          string      `json:"name"`
+	Address       pgtype.Text `json:"address"`
+	ContactNumber string      `json:"contact_number"`
+	Email         pgtype.Text `json:"email"`
+	CreatedAt     time.Time   `json:"created_at"`
 }
 
 type Department struct {
-	DepartmentID int32          `json:"department_id"`
-	Category     sql.NullString `json:"category"`
-	SubCategory  sql.NullString `json:"sub_category"`
-	Description  sql.NullString `json:"description"`
+	DepartmentID int32       `json:"department_id"`
+	Category     pgtype.Text `json:"category"`
+	SubCategory  pgtype.Text `json:"sub_category"`
+	Description  pgtype.Text `json:"description"`
 }
 
 type DispatchLog struct {
-	DispatchTime sql.NullTime   `json:"dispatch_time"`
-	DispatchID   int64          `json:"dispatch_id"`
-	Poster       sql.NullString `json:"poster"`
-	Approver     sql.NullString `json:"approver"`
-	OrderNum     sql.NullInt64  `json:"order_num"`
-	Vehicle      sql.NullString `json:"vehicle"`
+	DispatchTime pgtype.Timestamptz `json:"dispatch_time"`
+	DispatchID   int64              `json:"dispatch_id"`
+	Poster       pgtype.Text        `json:"poster"`
+	Approver     pgtype.Text        `json:"approver"`
+	OrderNum     pgtype.Int8        `json:"order_num"`
+	Vehicle      pgtype.Text        `json:"vehicle"`
 }
 
 type OrderLog struct {
-	OrderTime  sql.NullTime   `json:"order_time"`
-	OrderNum   sql.NullInt64  `json:"order_num"`
-	Poster     sql.NullString `json:"poster"`
-	Approver   sql.NullString `json:"approver"`
-	CustomerID sql.NullInt64  `json:"customer_id"`
-	Retailer   sql.NullString `json:"retailer"`
+	OrderTime  pgtype.Timestamptz `json:"order_time"`
+	OrderNum   pgtype.Int8        `json:"order_num"`
+	Poster     pgtype.Text        `json:"poster"`
+	Approver   pgtype.Text        `json:"approver"`
+	CustomerID pgtype.Int8        `json:"customer_id"`
+	Retailer   pgtype.Text        `json:"retailer"`
 }
 
 type Product struct {
@@ -83,61 +82,61 @@ type Product struct {
 }
 
 type ReceiveLog struct {
-	ReceiveTime sql.NullTime   `json:"receive_time"`
-	ReceiveID   int64          `json:"receive_id"`
-	Poster      sql.NullString `json:"poster"`
-	Approver    sql.NullString `json:"approver"`
-	DispatchID  sql.NullInt64  `json:"dispatch_id"`
-	OrderNum    sql.NullInt64  `json:"order_num"`
+	ReceiveTime pgtype.Timestamptz `json:"receive_time"`
+	ReceiveID   int64              `json:"receive_id"`
+	Poster      pgtype.Text        `json:"poster"`
+	Approver    pgtype.Text        `json:"approver"`
+	DispatchID  pgtype.Int8        `json:"dispatch_id"`
+	OrderNum    pgtype.Int8        `json:"order_num"`
 }
 
 type Sale struct {
-	ReceiptNum       int64          `json:"receipt_num"`
-	TillNum          sql.NullInt64  `json:"till_num"`
-	TxnTime          time.Time      `json:"txn_time"`
-	ProductID        int64          `json:"product_id"`
-	ItemName         sql.NullString `json:"item_name"`
-	Price            float64        `json:"price"`
-	Cost             float64        `json:"cost"`
-	Quantity         float64        `json:"quantity"`
-	VatCode          sql.NullString `json:"vat_code"`
-	HsCode           sql.NullString `json:"hs_code"`
-	VAT              float64        `json:"VAT"`
-	BatchCode        sql.NullString `json:"batch_code"`
-	SerialCode       sql.NullString `json:"serial_code"`
-	SerialCodeReturn sql.NullString `json:"serial_code_return"`
-	ServedBy         sql.NullString `json:"served_by"`
-	ApprovedBy       sql.NullString `json:"approved_by"`
-	State            string         `json:"state"`
+	ReceiptNum       int64       `json:"receipt_num"`
+	TillNum          pgtype.Int8 `json:"till_num"`
+	TxnTime          time.Time   `json:"txn_time"`
+	ProductID        int64       `json:"product_id"`
+	ItemName         pgtype.Text `json:"item_name"`
+	Price            float64     `json:"price"`
+	Cost             float64     `json:"cost"`
+	Quantity         float64     `json:"quantity"`
+	VatCode          pgtype.Text `json:"vat_code"`
+	HsCode           pgtype.Text `json:"hs_code"`
+	VAT              float64     `json:"VAT"`
+	BatchCode        pgtype.Text `json:"batch_code"`
+	SerialCode       pgtype.Text `json:"serial_code"`
+	SerialCodeReturn pgtype.Text `json:"serial_code_return"`
+	ServedBy         pgtype.Text `json:"served_by"`
+	ApprovedBy       pgtype.Text `json:"approved_by"`
+	State            string      `json:"state"`
 }
 
 type SalesTill struct {
-	TillNum      int64                 `json:"till_num"`
-	Teller       sql.NullString        `json:"teller"`
-	Supervisor   sql.NullString        `json:"supervisor"`
-	Branch       sql.NullString        `json:"branch"`
-	OpenTime     time.Time             `json:"open_time"`
-	OpenCash     float64               `json:"open_cash"`
-	CloseTime    sql.NullTime          `json:"close_time"`
-	CloseCash    sql.NullFloat64       `json:"close_cash"`
-	CloseSummary pqtype.NullRawMessage `json:"close_summary"`
+	TillNum      int64              `json:"till_num"`
+	Teller       pgtype.Text        `json:"teller"`
+	Supervisor   pgtype.Text        `json:"supervisor"`
+	Branch       pgtype.Text        `json:"branch"`
+	OpenTime     time.Time          `json:"open_time"`
+	OpenCash     float64            `json:"open_cash"`
+	CloseTime    pgtype.Timestamptz `json:"close_time"`
+	CloseCash    pgtype.Float8      `json:"close_cash"`
+	CloseSummary []byte             `json:"close_summary"`
 }
 
 type Salestrace struct {
-	SaleID         int32                 `json:"sale_id"`
-	CreatedAt      time.Time             `json:"created_at"`
-	ReceiptNum     int64                 `json:"receipt_num"`
-	TillNum        sql.NullInt64         `json:"till_num"`
-	SmartCard      int32                 `json:"smart_card"`
-	CustomerID     int64                 `json:"customer_id"`
-	Quantity       int64                 `json:"quantity"`
-	SaleTime       time.Time             `json:"sale_time"`
-	TotalPrice     int64                 `json:"total_price"`
-	CustomerNum    sql.NullInt64         `json:"customer_num"`
-	CashPaid       float64               `json:"cash_paid"`
-	PaymentSummary pqtype.NullRawMessage `json:"payment_summary"`
-	Change         float64               `json:"change"`
-	State          sql.NullString        `json:"state"`
+	SaleID         int32       `json:"sale_id"`
+	CreatedAt      time.Time   `json:"created_at"`
+	ReceiptNum     int64       `json:"receipt_num"`
+	TillNum        pgtype.Int8 `json:"till_num"`
+	SmartCard      int32       `json:"smart_card"`
+	CustomerID     int64       `json:"customer_id"`
+	Quantity       int64       `json:"quantity"`
+	SaleTime       time.Time   `json:"sale_time"`
+	TotalPrice     int64       `json:"total_price"`
+	CustomerNum    pgtype.Int8 `json:"customer_num"`
+	CashPaid       float64     `json:"cash_paid"`
+	PaymentSummary []byte      `json:"payment_summary"`
+	Change         float64     `json:"change"`
+	State          pgtype.Text `json:"state"`
 }
 
 type Supplier struct {
@@ -150,35 +149,35 @@ type Supplier struct {
 }
 
 type User struct {
-	UserID      int32                 `json:"user_id"`
-	Username    sql.NullString        `json:"username"`
-	Branch      sql.NullString        `json:"branch"`
-	StkLocation sql.NullString        `json:"stk_location"`
-	Reset       sql.NullString        `json:"reset"`
-	TillNum     sql.NullInt64         `json:"till_num"`
-	Rights      pqtype.NullRawMessage `json:"rights"`
-	IsActive    sql.NullBool          `json:"is_active"`
+	UserID      int32       `json:"user_id"`
+	Username    pgtype.Text `json:"username"`
+	Branch      pgtype.Text `json:"branch"`
+	StkLocation pgtype.Text `json:"stk_location"`
+	Reset       pgtype.Text `json:"reset"`
+	TillNum     pgtype.Int8 `json:"till_num"`
+	Rights      []byte      `json:"rights"`
+	IsActive    pgtype.Bool `json:"is_active"`
 }
 
 type Vehicle struct {
-	VehicleID       int32                 `json:"vehicle_id"`
-	VehicleName     sql.NullString        `json:"vehicle_name"`
-	RegistrationNum string                `json:"registration_num"`
-	VinNum          sql.NullString        `json:"vin_num"`
-	ManufactureDate sql.NullTime          `json:"manufacture_date"`
-	Mileage         sql.NullFloat64       `json:"mileage"`
-	LastMileageRead time.Time             `json:"last_mileage_read"`
-	InsuranceExpiry time.Time             `json:"insurance_expiry"`
-	Checklist       pqtype.NullRawMessage `json:"checklist"`
-	State           sql.NullString        `json:"state"`
+	VehicleID       int32         `json:"vehicle_id"`
+	VehicleName     pgtype.Text   `json:"vehicle_name"`
+	RegistrationNum string        `json:"registration_num"`
+	VinNum          pgtype.Text   `json:"vin_num"`
+	ManufactureDate pgtype.Date   `json:"manufacture_date"`
+	Mileage         pgtype.Float8 `json:"mileage"`
+	LastMileageRead time.Time     `json:"last_mileage_read"`
+	InsuranceExpiry pgtype.Date   `json:"insurance_expiry"`
+	Checklist       []byte        `json:"checklist"`
+	State           pgtype.Text   `json:"state"`
 }
 
 type VehicleActivityLog struct {
-	ActivityID   int64                 `json:"activity_id"`
-	ActivityTime time.Time             `json:"activity_time"`
-	DoneBy       sql.NullString        `json:"done_by"`
-	VehicleID    int32                 `json:"vehicle_id"`
-	ApprovedBy   sql.NullString        `json:"approved_by"`
-	Checklist    pqtype.NullRawMessage `json:"checklist"`
-	Notation     sql.NullString        `json:"notation"`
+	ActivityID   int64       `json:"activity_id"`
+	ActivityTime time.Time   `json:"activity_time"`
+	DoneBy       pgtype.Text `json:"done_by"`
+	VehicleID    int32       `json:"vehicle_id"`
+	ApprovedBy   pgtype.Text `json:"approved_by"`
+	Checklist    []byte      `json:"checklist"`
+	Notation     pgtype.Text `json:"notation"`
 }

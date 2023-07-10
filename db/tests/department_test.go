@@ -2,7 +2,6 @@ package tests
 
 import (
 	"context"
-	"database/sql"
 	db "github.com/ngenohkevin/speedsales/db/sqlc"
 	"github.com/ngenohkevin/speedsales/utils"
 	"github.com/stretchr/testify/require"
@@ -95,6 +94,6 @@ func TestDeleteDepartment(t *testing.T) {
 
 	department2, err := testQueries.GetDepartment(context.Background(), department1.DepartmentID)
 	require.Error(t, err)
-	require.EqualError(t, err, sql.ErrNoRows.Error())
+	require.EqualError(t, err, utils.ErrRecordNotFound.Error())
 	require.Empty(t, department2)
 }

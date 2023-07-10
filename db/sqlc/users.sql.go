@@ -7,9 +7,8 @@ package db
 
 import (
 	"context"
-	"database/sql"
 
-	"github.com/tabbed/pqtype"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createUser = `-- name: CreateUser :one
@@ -21,17 +20,17 @@ INSERT INTO users (
 `
 
 type CreateUserParams struct {
-	Username    sql.NullString        `json:"username"`
-	Branch      sql.NullString        `json:"branch"`
-	StkLocation sql.NullString        `json:"stk_location"`
-	Reset       sql.NullString        `json:"reset"`
-	TillNum     sql.NullInt64         `json:"till_num"`
-	Rights      pqtype.NullRawMessage `json:"rights"`
-	IsActive    sql.NullBool          `json:"is_active"`
+	Username    pgtype.Text `json:"username"`
+	Branch      pgtype.Text `json:"branch"`
+	StkLocation pgtype.Text `json:"stk_location"`
+	Reset       pgtype.Text `json:"reset"`
+	TillNum     pgtype.Int8 `json:"till_num"`
+	Rights      []byte      `json:"rights"`
+	IsActive    pgtype.Bool `json:"is_active"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser,
+	row := q.db.QueryRow(ctx, createUser,
 		arg.Username,
 		arg.Branch,
 		arg.StkLocation,
@@ -60,7 +59,7 @@ WHERE user_id = $1
 `
 
 func (q *Queries) DeleteUsers(ctx context.Context, userID int32) error {
-	_, err := q.db.ExecContext(ctx, deleteUsers, userID)
+	_, err := q.db.Exec(ctx, deleteUsers, userID)
 	return err
 }
 
@@ -70,7 +69,7 @@ WHERE user_id = $1 LIMIT 1
 `
 
 func (q *Queries) GetUser(ctx context.Context, userID int32) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUser, userID)
+	row := q.db.QueryRow(ctx, getUser, userID)
 	var i User
 	err := row.Scan(
 		&i.UserID,
@@ -100,7 +99,7 @@ type ListUsersParams struct {
 }
 
 func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error) {
-	rows, err := q.db.QueryContext(ctx, listUsers, arg.UserID, arg.Limit, arg.Offset)
+	rows, err := q.db.Query(ctx, listUsers, arg.UserID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -122,9 +121,6 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 		}
 		items = append(items, i)
 	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
@@ -145,18 +141,18 @@ RETURNING user_id, username, branch, stk_location, reset, till_num, rights, is_a
 `
 
 type UpdateUserParams struct {
-	UserID      int32                 `json:"user_id"`
-	Username    sql.NullString        `json:"username"`
-	Branch      sql.NullString        `json:"branch"`
-	StkLocation sql.NullString        `json:"stk_location"`
-	Reset       sql.NullString        `json:"reset"`
-	TillNum     sql.NullInt64         `json:"till_num"`
-	Rights      pqtype.NullRawMessage `json:"rights"`
-	IsActive    sql.NullBool          `json:"is_active"`
+	UserID      int32       `json:"user_id"`
+	Username    pgtype.Text `json:"username"`
+	Branch      pgtype.Text `json:"branch"`
+	StkLocation pgtype.Text `json:"stk_location"`
+	Reset       pgtype.Text `json:"reset"`
+	TillNum     pgtype.Int8 `json:"till_num"`
+	Rights      []byte      `json:"rights"`
+	IsActive    pgtype.Bool `json:"is_active"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, updateUser,
+	row := q.db.QueryRow(ctx, updateUser,
 		arg.UserID,
 		arg.Username,
 		arg.Branch,

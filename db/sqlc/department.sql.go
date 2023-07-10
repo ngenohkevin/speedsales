@@ -7,7 +7,8 @@ package db
 
 import (
 	"context"
-	"database/sql"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createDepartment = `-- name: CreateDepartment :one
@@ -18,13 +19,13 @@ VALUES (
 `
 
 type CreateDepartmentParams struct {
-	Category    sql.NullString `json:"category"`
-	SubCategory sql.NullString `json:"sub_category"`
-	Description sql.NullString `json:"description"`
+	Category    pgtype.Text `json:"category"`
+	SubCategory pgtype.Text `json:"sub_category"`
+	Description pgtype.Text `json:"description"`
 }
 
 func (q *Queries) CreateDepartment(ctx context.Context, arg CreateDepartmentParams) (Department, error) {
-	row := q.db.QueryRowContext(ctx, createDepartment, arg.Category, arg.SubCategory, arg.Description)
+	row := q.db.QueryRow(ctx, createDepartment, arg.Category, arg.SubCategory, arg.Description)
 	var i Department
 	err := row.Scan(
 		&i.DepartmentID,
@@ -41,7 +42,7 @@ WHERE department_id = $1
 `
 
 func (q *Queries) DeleteDepartment(ctx context.Context, departmentID int32) error {
-	_, err := q.db.ExecContext(ctx, deleteDepartment, departmentID)
+	_, err := q.db.Exec(ctx, deleteDepartment, departmentID)
 	return err
 }
 
@@ -51,7 +52,7 @@ WHERE department_id = $1 LIMIT 1
 `
 
 func (q *Queries) GetDepartment(ctx context.Context, departmentID int32) (Department, error) {
-	row := q.db.QueryRowContext(ctx, getDepartment, departmentID)
+	row := q.db.QueryRow(ctx, getDepartment, departmentID)
 	var i Department
 	err := row.Scan(
 		&i.DepartmentID,
@@ -77,7 +78,7 @@ type ListDepartmentParams struct {
 }
 
 func (q *Queries) ListDepartment(ctx context.Context, arg ListDepartmentParams) ([]Department, error) {
-	rows, err := q.db.QueryContext(ctx, listDepartment, arg.DepartmentID, arg.Limit, arg.Offset)
+	rows, err := q.db.Query(ctx, listDepartment, arg.DepartmentID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -95,9 +96,6 @@ func (q *Queries) ListDepartment(ctx context.Context, arg ListDepartmentParams) 
 		}
 		items = append(items, i)
 	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
@@ -114,14 +112,14 @@ RETURNING department_id, category, sub_category, description
 `
 
 type UpdateDepartmentParams struct {
-	DepartmentID int32          `json:"department_id"`
-	Category     sql.NullString `json:"category"`
-	SubCategory  sql.NullString `json:"sub_category"`
-	Description  sql.NullString `json:"description"`
+	DepartmentID int32       `json:"department_id"`
+	Category     pgtype.Text `json:"category"`
+	SubCategory  pgtype.Text `json:"sub_category"`
+	Description  pgtype.Text `json:"description"`
 }
 
 func (q *Queries) UpdateDepartment(ctx context.Context, arg UpdateDepartmentParams) (Department, error) {
-	row := q.db.QueryRowContext(ctx, updateDepartment,
+	row := q.db.QueryRow(ctx, updateDepartment,
 		arg.DepartmentID,
 		arg.Category,
 		arg.SubCategory,

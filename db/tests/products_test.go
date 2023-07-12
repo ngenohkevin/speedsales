@@ -6,6 +6,7 @@ import (
 	"github.com/ngenohkevin/speedsales/utils"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"time"
 )
 
 func createRandomProduct(t *testing.T) db.Product {
@@ -53,4 +54,6 @@ func TestGetProduct(t *testing.T) {
 	require.Equal(t, product1.WholesalePrice, product2.WholesalePrice)
 	require.Equal(t, product1.MinMargin, product2.MinMargin)
 	require.Equal(t, product1.Quantity, product2.Quantity)
+
+	require.WithinDuration(t, product1.CreatedAt, product2.CreatedAt, time.Second)
 }

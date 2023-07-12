@@ -15,15 +15,15 @@ type Querier interface {
 	CreateSupplier(ctx context.Context, arg CreateSupplierParams) (Supplier, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteCodeTranslator(ctx context.Context, masterCode string) error
-	DeleteDepartment(ctx context.Context, departmentID int32) error
-	DeleteProducts(ctx context.Context, productID int32) error
-	DeleteSupplier(ctx context.Context, supplierID int32) error
-	DeleteUsers(ctx context.Context, userID int32) error
+	DeleteDepartment(ctx context.Context, departmentID int64) error
+	DeleteProducts(ctx context.Context, productID int64) error
+	DeleteSupplier(ctx context.Context, supplierID int64) error
+	DeleteUsers(ctx context.Context, userID int64) error
 	GetCodeTranslator(ctx context.Context, masterCode string) (CodeTranslator, error)
-	GetDepartment(ctx context.Context, departmentID int32) (Department, error)
-	GetProducts(ctx context.Context, productID int32) (Product, error)
-	GetSupplier(ctx context.Context, supplierID int32) (Supplier, error)
-	GetUser(ctx context.Context, userID int32) (User, error)
+	GetDepartment(ctx context.Context, departmentID int64) (Department, error)
+	GetProducts(ctx context.Context, productID int64) (Product, error)
+	GetSupplier(ctx context.Context, supplierID int64) (Supplier, error)
+	GetUser(ctx context.Context, userID int64) (User, error)
 	ListCodeTranslator(ctx context.Context, arg ListCodeTranslatorParams) ([]CodeTranslator, error)
 	ListDepartment(ctx context.Context, arg ListDepartmentParams) ([]Department, error)
 	ListProducts(ctx context.Context, arg ListProductsParams) ([]Product, error)

@@ -21,7 +21,7 @@ type CreateProductsParams struct {
 	Name           string  `json:"name"`
 	Description    string  `json:"description"`
 	Category       string  `json:"category"`
-	DepartmentID   int32   `json:"department_id"`
+	DepartmentID   int64   `json:"department_id"`
 	SupplierID     int64   `json:"supplier_id"`
 	Cost           int64   `json:"cost"`
 	SellingPrice   int64   `json:"selling_price"`
@@ -66,7 +66,7 @@ DELETE FROM products
 WHERE product_id = $1
 `
 
-func (q *Queries) DeleteProducts(ctx context.Context, productID int32) error {
+func (q *Queries) DeleteProducts(ctx context.Context, productID int64) error {
 	_, err := q.db.Exec(ctx, deleteProducts, productID)
 	return err
 }
@@ -76,7 +76,7 @@ SELECT product_id, name, description, category, department_id, supplier_id, cost
 WHERE product_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetProducts(ctx context.Context, productID int32) (Product, error) {
+func (q *Queries) GetProducts(ctx context.Context, productID int64) (Product, error) {
 	row := q.db.QueryRow(ctx, getProducts, productID)
 	var i Product
 	err := row.Scan(
@@ -105,7 +105,7 @@ OFFSET $3
 `
 
 type ListProductsParams struct {
-	ProductID int32 `json:"product_id"`
+	ProductID int64 `json:"product_id"`
 	Limit     int32 `json:"limit"`
 	Offset    int32 `json:"offset"`
 }
@@ -158,7 +158,7 @@ RETURNING product_id, name, description, category, department_id, supplier_id, c
 `
 
 type UpdateProductsParams struct {
-	ProductID      int32   `json:"product_id"`
+	ProductID      int64   `json:"product_id"`
 	Name           string  `json:"name"`
 	Description    string  `json:"description"`
 	Category       string  `json:"category"`

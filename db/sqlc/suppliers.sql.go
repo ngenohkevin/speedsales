@@ -48,7 +48,7 @@ DELETE FROM suppliers
 WHERE supplier_id = $1
 `
 
-func (q *Queries) DeleteSupplier(ctx context.Context, supplierID int32) error {
+func (q *Queries) DeleteSupplier(ctx context.Context, supplierID int64) error {
 	_, err := q.db.Exec(ctx, deleteSupplier, supplierID)
 	return err
 }
@@ -58,7 +58,7 @@ SELECT supplier_id, name, address, contact_number, email, created_at FROM suppli
 WHERE supplier_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetSupplier(ctx context.Context, supplierID int32) (Supplier, error) {
+func (q *Queries) GetSupplier(ctx context.Context, supplierID int64) (Supplier, error) {
 	row := q.db.QueryRow(ctx, getSupplier, supplierID)
 	var i Supplier
 	err := row.Scan(
@@ -81,7 +81,7 @@ OFFSET $3
 `
 
 type ListSuppliersParams struct {
-	SupplierID int32 `json:"supplier_id"`
+	SupplierID int64 `json:"supplier_id"`
 	Limit      int32 `json:"limit"`
 	Offset     int32 `json:"offset"`
 }
@@ -124,7 +124,7 @@ RETURNING supplier_id, name, address, contact_number, email, created_at
 `
 
 type UpdateSupplierParams struct {
-	SupplierID    int32  `json:"supplier_id"`
+	SupplierID    int64  `json:"supplier_id"`
 	Name          string `json:"name"`
 	Address       string `json:"address"`
 	ContactNumber string `json:"contact_number"`

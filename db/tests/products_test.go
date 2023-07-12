@@ -57,3 +57,33 @@ func TestGetProduct(t *testing.T) {
 
 	require.WithinDuration(t, product1.CreatedAt, product2.CreatedAt, time.Second)
 }
+
+func TestUpdateProduct(t *testing.T) {
+	product1 := createRandomProduct(t)
+
+	arg := db.UpdateProductsParams{
+		ProductID:      product1.ProductID,
+		Name:           utils.RandomName(),
+		Description:    utils.RandomDesc(),
+		Category:       utils.RandomAnyString(),
+		Cost:           utils.RandomAnyInt(),
+		SellingPrice:   utils.RandomAnyInt(),
+		WholesalePrice: utils.RandomAnyInt(),
+		MinMargin:      utils.RandomFloat(),
+		Quantity:       utils.RandomAnyInt(),
+	}
+
+	product2, err := testQueries.UpdateProducts(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, product2)
+
+	require.Equal(t, product1.ProductID, product2.ProductID)
+	require.Equal(t, arg.Name, product2.Name)
+	require.Equal(t, arg.Description, product2.Description)
+	require.Equal(t, arg.Category, product2.Category)
+	require.Equal(t, arg.Cost, product2.Cost)
+	require.Equal(t, arg.SellingPrice, product2.SellingPrice)
+	require.Equal(t, arg.WholesalePrice, product2.WholesalePrice)
+	require.Equal(t, arg.MinMargin, product2.MinMargin)
+	require.Equal(t, arg.Quantity, product2.Quantity)
+}

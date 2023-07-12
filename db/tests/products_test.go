@@ -9,13 +9,13 @@ import (
 	"time"
 )
 
-func createRandomProduct(t *testing.T) db.Product {
+func createRandomProduct(t *testing.T, department db.Department, supplier db.Supplier) db.Product {
 	arg := db.CreateProductsParams{
 		Name:           utils.RandomName(),
 		Description:    utils.RandomDesc(),
 		Category:       utils.RandomAnyString(),
-		DepartmentID:   int32(utils.RandomAnyInt()),
-		SupplierID:     utils.RandomAnyInt(),
+		DepartmentID:   department.DepartmentID,
+		SupplierID:     supplier.SupplierID,
 		Cost:           utils.RandomAnyInt(),
 		SellingPrice:   utils.RandomAnyInt(),
 		WholesalePrice: utils.RandomAnyInt(),
@@ -26,6 +26,17 @@ func createRandomProduct(t *testing.T) db.Product {
 	require.NoError(t, err)
 	require.NotEmpty(t, product)
 
+	require.Equal(t, arg.Name, product.Name)
+	require.Equal(t, arg.Description, product.Description)
+	require.Equal(t, arg.Category, product.Category)
+	require.Equal(t, arg.DepartmentID, product.DepartmentID)
+	require.Equal(t, arg.SupplierID, product.SupplierID)
+	require.Equal(t, arg.Cost, product.Cost)
+	require.Equal(t, arg.SellingPrice, product.SellingPrice)
+	require.Equal(t, arg.WholesalePrice, product.WholesalePrice)
+	require.Equal(t, arg.MinMargin, product.MinMargin)
+	require.Equal(t, arg.Quantity, product.Quantity)
+
 	require.NotZero(t, product.ProductID)
 	require.NotZero(t, product.CreatedAt)
 
@@ -33,11 +44,16 @@ func createRandomProduct(t *testing.T) db.Product {
 }
 
 func TestCreateProduct(t *testing.T) {
-	createRandomUsers(t)
+	department := createRandomDepartment(t)
+	supplier := createRandomSuppliers(t)
+	createRandomProduct(t, department, supplier)
 }
 
 func TestGetProduct(t *testing.T) {
-	product1 := createRandomProduct(t)
+	department := createRandomDepartment(t)
+	supplier := createRandomSuppliers(t)
+
+	product1 := createRandomProduct(t, department, supplier)
 
 	product2, err := testQueries.GetProducts(context.Background(), product1.ProductID)
 	require.NoError(t, err)
@@ -59,7 +75,10 @@ func TestGetProduct(t *testing.T) {
 }
 
 func TestUpdateProduct(t *testing.T) {
-	product1 := createRandomProduct(t)
+	department := createRandomDepartment(t)
+	supplier := createRandomSuppliers(t)
+
+	product1 := createRandomProduct(t, department, supplier)
 
 	arg := db.UpdateProductsParams{
 		ProductID:      product1.ProductID,
@@ -86,4 +105,6 @@ func TestUpdateProduct(t *testing.T) {
 	require.Equal(t, arg.WholesalePrice, product2.WholesalePrice)
 	require.Equal(t, arg.MinMargin, product2.MinMargin)
 	require.Equal(t, arg.Quantity, product2.Quantity)
+
+	require.WithinDuration(t, product1.CreatedAt, product2.CreatedAt, time.Second)
 }

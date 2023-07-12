@@ -58,7 +58,7 @@ DELETE FROM users
 WHERE user_id = $1
 `
 
-func (q *Queries) DeleteUsers(ctx context.Context, userID int32) error {
+func (q *Queries) DeleteUsers(ctx context.Context, userID int64) error {
 	_, err := q.db.Exec(ctx, deleteUsers, userID)
 	return err
 }
@@ -68,7 +68,7 @@ SELECT user_id, username, branch, stk_location, reset, till_num, rights, is_acti
 WHERE user_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUser(ctx context.Context, userID int32) (User, error) {
+func (q *Queries) GetUser(ctx context.Context, userID int64) (User, error) {
 	row := q.db.QueryRow(ctx, getUser, userID)
 	var i User
 	err := row.Scan(
@@ -93,7 +93,7 @@ OFFSET $3
 `
 
 type ListUsersParams struct {
-	UserID int32 `json:"user_id"`
+	UserID int64 `json:"user_id"`
 	Limit  int32 `json:"limit"`
 	Offset int32 `json:"offset"`
 }
@@ -141,7 +141,7 @@ RETURNING user_id, username, branch, stk_location, reset, till_num, rights, is_a
 `
 
 type UpdateUserParams struct {
-	UserID      int32       `json:"user_id"`
+	UserID      int64       `json:"user_id"`
 	Username    pgtype.Text `json:"username"`
 	Branch      pgtype.Text `json:"branch"`
 	StkLocation pgtype.Text `json:"stk_location"`

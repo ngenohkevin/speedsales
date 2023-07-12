@@ -41,7 +41,7 @@ DELETE FROM department
 WHERE department_id = $1
 `
 
-func (q *Queries) DeleteDepartment(ctx context.Context, departmentID int32) error {
+func (q *Queries) DeleteDepartment(ctx context.Context, departmentID int64) error {
 	_, err := q.db.Exec(ctx, deleteDepartment, departmentID)
 	return err
 }
@@ -51,7 +51,7 @@ SELECT department_id, category, sub_category, description FROM department
 WHERE department_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetDepartment(ctx context.Context, departmentID int32) (Department, error) {
+func (q *Queries) GetDepartment(ctx context.Context, departmentID int64) (Department, error) {
 	row := q.db.QueryRow(ctx, getDepartment, departmentID)
 	var i Department
 	err := row.Scan(
@@ -72,7 +72,7 @@ OFFSET $3
 `
 
 type ListDepartmentParams struct {
-	DepartmentID int32 `json:"department_id"`
+	DepartmentID int64 `json:"department_id"`
 	Limit        int32 `json:"limit"`
 	Offset       int32 `json:"offset"`
 }
@@ -112,7 +112,7 @@ RETURNING department_id, category, sub_category, description
 `
 
 type UpdateDepartmentParams struct {
-	DepartmentID int32       `json:"department_id"`
+	DepartmentID int64       `json:"department_id"`
 	Category     pgtype.Text `json:"category"`
 	SubCategory  pgtype.Text `json:"sub_category"`
 	Description  pgtype.Text `json:"description"`

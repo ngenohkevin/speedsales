@@ -33,7 +33,7 @@ type CodeTranslator struct {
 }
 
 type Customer struct {
-	CustomerID    int32       `json:"customer_id"`
+	CustomerID    int64       `json:"customer_id"`
 	Name          string      `json:"name"`
 	Address       pgtype.Text `json:"address"`
 	ContactNumber string      `json:"contact_number"`
@@ -42,7 +42,7 @@ type Customer struct {
 }
 
 type Department struct {
-	DepartmentID int32       `json:"department_id"`
+	DepartmentID int64       `json:"department_id"`
 	Category     pgtype.Text `json:"category"`
 	SubCategory  pgtype.Text `json:"sub_category"`
 	Description  pgtype.Text `json:"description"`
@@ -67,11 +67,11 @@ type OrderLog struct {
 }
 
 type Product struct {
-	ProductID      int32     `json:"product_id"`
+	ProductID      int64     `json:"product_id"`
 	Name           string    `json:"name"`
 	Description    string    `json:"description"`
 	Category       string    `json:"category"`
-	DepartmentID   int32     `json:"department_id"`
+	DepartmentID   int64     `json:"department_id"`
 	SupplierID     int64     `json:"supplier_id"`
 	Cost           int64     `json:"cost"`
 	SellingPrice   int64     `json:"selling_price"`
@@ -123,7 +123,7 @@ type SalesTill struct {
 }
 
 type Salestrace struct {
-	SaleID         int32       `json:"sale_id"`
+	SaleID         int64       `json:"sale_id"`
 	CreatedAt      time.Time   `json:"created_at"`
 	ReceiptNum     int64       `json:"receipt_num"`
 	TillNum        pgtype.Int8 `json:"till_num"`
@@ -140,7 +140,7 @@ type Salestrace struct {
 }
 
 type Supplier struct {
-	SupplierID    int32     `json:"supplier_id"`
+	SupplierID    int64     `json:"supplier_id"`
 	Name          string    `json:"name"`
 	Address       string    `json:"address"`
 	ContactNumber string    `json:"contact_number"`
@@ -149,7 +149,7 @@ type Supplier struct {
 }
 
 type User struct {
-	UserID      int32       `json:"user_id"`
+	UserID      int64       `json:"user_id"`
 	Username    pgtype.Text `json:"username"`
 	Branch      pgtype.Text `json:"branch"`
 	StkLocation pgtype.Text `json:"stk_location"`
@@ -160,7 +160,7 @@ type User struct {
 }
 
 type Vehicle struct {
-	VehicleID       int32         `json:"vehicle_id"`
+	VehicleID       int64         `json:"vehicle_id"`
 	VehicleName     pgtype.Text   `json:"vehicle_name"`
 	RegistrationNum string        `json:"registration_num"`
 	VinNum          pgtype.Text   `json:"vin_num"`

@@ -108,3 +108,7 @@ func TestUpdateProduct(t *testing.T) {
 
 	require.WithinDuration(t, product1.CreatedAt, product2.CreatedAt, time.Second)
 }
+
+func TestListProducts(t *testing.T) {
+
+}

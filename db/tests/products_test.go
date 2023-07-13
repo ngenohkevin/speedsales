@@ -136,3 +136,19 @@ func TestListProducts(t *testing.T) {
 		require.Equal(t, lastProduct.ProductID, product.ProductID)
 	}
 }
+
+func TestDeleteProduct(t *testing.T) {
+	department := createRandomDepartment(t)
+	supplier := createRandomSuppliers(t)
+
+	product1 := createRandomProduct(t, department, supplier)
+
+	err := testQueries.DeleteProducts(context.Background(), product1.ProductID)
+	require.NoError(t, err)
+
+	product, err := testQueries.GetProducts(context.Background(), product1.ProductID)
+	require.Error(t, err)
+
+	require.EqualError(t, err, utils.ErrRecordNotFound.Error())
+	require.Empty(t, product)
+}

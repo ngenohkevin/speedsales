@@ -110,5 +110,29 @@ func TestUpdateProduct(t *testing.T) {
 }
 
 func TestListProducts(t *testing.T) {
+	var lastProduct db.Product
 
+	for i := 0; i < 10; i++ {
+		department := createRandomDepartment(t)
+		supplier := createRandomSuppliers(t)
+
+		product1 := createRandomProduct(t, department, supplier)
+
+		lastProduct = product1
+	}
+
+	arg := db.ListProductsParams{
+		ProductID: lastProduct.ProductID,
+		Limit:     5,
+		Offset:    0,
+	}
+
+	products, err := testQueries.ListProducts(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, products)
+
+	for _, product := range products {
+		require.NotEmpty(t, product)
+		require.Equal(t, lastProduct.ProductID, product.ProductID)
+	}
 }

@@ -28,4 +28,4 @@ RETURNING *;
 
 -- name: DeleteCustomer :exec
 DELETE FROM customers
-WHERE customer_id = $1
+WHERE customer_id = $1;

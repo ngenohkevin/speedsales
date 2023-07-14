@@ -10,26 +10,31 @@ import (
 
 type Querier interface {
 	CreateCodeTranslator(ctx context.Context, arg CreateCodeTranslatorParams) (CodeTranslator, error)
+	CreateCustomer(ctx context.Context, arg CreateCustomerParams) (Customer, error)
 	CreateDepartment(ctx context.Context, arg CreateDepartmentParams) (Department, error)
 	CreateProducts(ctx context.Context, arg CreateProductsParams) (Product, error)
 	CreateSupplier(ctx context.Context, arg CreateSupplierParams) (Supplier, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteCodeTranslator(ctx context.Context, masterCode string) error
+	DeleteCustomer(ctx context.Context, customerID int64) error
 	DeleteDepartment(ctx context.Context, departmentID int64) error
 	DeleteProducts(ctx context.Context, productID int64) error
 	DeleteSupplier(ctx context.Context, supplierID int64) error
 	DeleteUsers(ctx context.Context, userID int64) error
 	GetCodeTranslator(ctx context.Context, masterCode string) (CodeTranslator, error)
+	GetCustomer(ctx context.Context, customerID int64) (Customer, error)
 	GetDepartment(ctx context.Context, departmentID int64) (Department, error)
 	GetProducts(ctx context.Context, productID int64) (Product, error)
 	GetSupplier(ctx context.Context, supplierID int64) (Supplier, error)
 	GetUser(ctx context.Context, userID int64) (User, error)
 	ListCodeTranslator(ctx context.Context, arg ListCodeTranslatorParams) ([]CodeTranslator, error)
+	ListCustomers(ctx context.Context, arg ListCustomersParams) ([]Customer, error)
 	ListDepartment(ctx context.Context, arg ListDepartmentParams) ([]Department, error)
 	ListProducts(ctx context.Context, arg ListProductsParams) ([]Product, error)
 	ListSuppliers(ctx context.Context, arg ListSuppliersParams) ([]Supplier, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
 	UpdateCodeTranslator(ctx context.Context, arg UpdateCodeTranslatorParams) (CodeTranslator, error)
+	UpdateCustomer(ctx context.Context, arg UpdateCustomerParams) (Customer, error)
 	UpdateDepartment(ctx context.Context, arg UpdateDepartmentParams) (Department, error)
 	UpdateProducts(ctx context.Context, arg UpdateProductsParams) (Product, error)
 	UpdateSupplier(ctx context.Context, arg UpdateSupplierParams) (Supplier, error)

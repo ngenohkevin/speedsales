@@ -75,3 +75,25 @@ func TestUpdateCustomer(t *testing.T) {
 
 	require.WithinDuration(t, customer1.CreatedAt, customer2.CreatedAt, time.Second)
 }
+
+func TestListCustomers(t *testing.T) {
+	var lastCustomer db.Customer
+
+	for i := 0; i < 10; i++ {
+		lastCustomer = createRandomCustomer(t)
+	}
+
+	arg := db.ListCustomersParams{
+		CustomerID: lastCustomer.CustomerID,
+		Limit:      5,
+		Offset:     0,
+	}
+	customers, err := testQueries.ListCustomers(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, customers)
+
+	for _, customer := range customers {
+		require.NotEmpty(t, customer)
+		require.Equal(t, lastCustomer.CustomerID, customer.CustomerID)
+	}
+}

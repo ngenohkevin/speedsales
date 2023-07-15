@@ -68,5 +68,10 @@ func TestUpdateCustomer(t *testing.T) {
 	require.NotEmpty(t, customer2)
 
 	require.Equal(t, customer1.CustomerID, customer2.CustomerID)
+	require.Equal(t, arg.Name, customer2.Name)
+	require.Equal(t, arg.Address, customer2.Address)
+	require.Equal(t, arg.ContactNumber, customer2.ContactNumber)
+	require.Equal(t, arg.Email, customer2.Email)
 
+	require.WithinDuration(t, customer1.CreatedAt, customer2.CreatedAt, time.Second)
 }

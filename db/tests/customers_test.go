@@ -97,3 +97,17 @@ func TestListCustomers(t *testing.T) {
 		require.Equal(t, lastCustomer.CustomerID, customer.CustomerID)
 	}
 }
+
+func TestDeleteCustomer(t *testing.T) {
+	customer1 := createRandomCustomer(t)
+
+	err := testQueries.DeleteCustomer(context.Background(), customer1.CustomerID)
+	require.NoError(t, err)
+
+	customer2, err := testQueries.GetCustomer(context.Background(), customer1.CustomerID)
+	require.Error(t, err)
+	require.Empty(t, customer2)
+
+	require.EqualError(t, err, utils.ErrRecordNotFound.Error())
+
+}

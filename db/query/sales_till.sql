@@ -8,3 +8,10 @@ INSERT INTO sales_till (
 -- name: GetSales_till :one
 SELECT * FROM sales_till
 WHERE till_num = $1 LIMIT 1;
+
+-- name: ListSales_till :many
+SELECT * FROM sales_till
+WHERE till_num = $1
+ORDER BY teller
+LIMIT $2
+OFFSET $3;

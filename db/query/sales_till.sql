@@ -27,3 +27,4 @@ SET till_num = $2,
     close_time = $8
 WHERE till_num = $1
 RETURNING *;
+

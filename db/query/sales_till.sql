@@ -30,3 +30,4 @@ RETURNING *;
 
 -- name: DeleteSales_till :exec\
 DELETE FROM sales_till
+WHERE till_num =

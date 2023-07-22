@@ -28,3 +28,4 @@ SET till_num = $2,
 WHERE till_num = $1
 RETURNING *;
 
+-- name: DeleteSales_till :exec\

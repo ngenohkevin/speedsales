@@ -2,6 +2,7 @@ package utils
 
 import (
 	"github.com/jackc/pgx/v5/pgtype"
+	"time"
 )
 
 func NullStrings(value string) pgtype.Text {
@@ -31,6 +32,10 @@ func NullBool(value bool) pgtype.Bool {
 		Valid: true,
 	}
 }
-func NullTimeStamp() {
-
+func NullTimeStamp(value time.Time) pgtype.Timestamptz {
+	return pgtype.Timestamptz{
+		Time:             value,
+		InfinityModifier: 0,
+		Valid:            true,
+	}
 }

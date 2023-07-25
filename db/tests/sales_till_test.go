@@ -5,6 +5,7 @@ import (
 	db "github.com/ngenohkevin/speedsales/db/sqlc"
 	"github.com/ngenohkevin/speedsales/utils"
 	"testing"
+	"time"
 )
 
 func createRandomSalesTill(t *testing.T) db.SalesTill {
@@ -13,7 +14,7 @@ func createRandomSalesTill(t *testing.T) db.SalesTill {
 		Teller:       utils.NullStrings(utils.RandomAnyString()),
 		Supervisor:   utils.NullStrings(utils.RandomAnyString()),
 		Branch:       utils.NullStrings(utils.RandomAnyString()),
-		CloseTime:    pgtype.Timestamptz{},
+		CloseTime:    utils.NullTimeStamp(time.Now()),
 		CloseCash:    pgtype.Float8{},
 		CloseSummary: nil,
 	}

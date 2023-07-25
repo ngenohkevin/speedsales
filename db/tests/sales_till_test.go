@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"github.com/jackc/pgx/v5/pgtype"
 	db "github.com/ngenohkevin/speedsales/db/sqlc"
 	"github.com/ngenohkevin/speedsales/utils"
 	"testing"
@@ -15,8 +14,8 @@ func createRandomSalesTill(t *testing.T) db.SalesTill {
 		Supervisor:   utils.NullStrings(utils.RandomAnyString()),
 		Branch:       utils.NullStrings(utils.RandomAnyString()),
 		CloseTime:    utils.NullTimeStamp(time.Now()),
-		CloseCash:    pgtype.Float8{},
-		CloseSummary: nil,
+		CloseCash:    utils.NullFloat64(utils.RandomFloat()),
+		CloseSummary: utils.RandomJSON(4),
 	}
 
 }

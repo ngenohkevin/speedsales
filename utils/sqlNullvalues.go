@@ -31,3 +31,6 @@ func NullBool(value bool) pgtype.Bool {
 		Valid: true,
 	}
 }
+func NullTimeStamp() {
+
+}

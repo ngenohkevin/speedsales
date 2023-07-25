@@ -39,3 +39,9 @@ func NullTimeStamp(value time.Time) pgtype.Timestamptz {
 		Valid:            true,
 	}
 }
+func NullFloat64(value float64) pgtype.Float8 {
+	return pgtype.Float8{
+		Float64: value,
+		Valid:   true,
+	}
+}

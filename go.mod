@@ -4,10 +4,8 @@ go 1.19
 
 require (
 	github.com/jackc/pgx/v5 v5.4.1
-	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
-	github.com/tabbed/pqtype v0.1.1
 )
 
 require (

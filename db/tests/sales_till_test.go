@@ -38,6 +38,7 @@ func createRandomSalesTill(t *testing.T) db.SalesTill {
 	err = json.Unmarshal(salesTill.CloseSummary, &actualCloseSummary)
 	require.NoError(t, err)
 
+	//require.Equal to compare the expected vs the actual values
 	require.Equal(t, arg.TillNum, salesTill.TillNum)
 	require.Equal(t, arg.Teller, salesTill.Teller)
 	require.Equal(t, arg.Supervisor, salesTill.Supervisor)

@@ -34,9 +34,9 @@ func NullBool(value bool) pgtype.Bool {
 }
 func NullTimeStamp(value time.Time) pgtype.Timestamptz {
 	return pgtype.Timestamptz{
-		Time: value,
-		//InfinityModifier: 0,
-		Valid: true,
+		Time:             value,
+		InfinityModifier: 0,
+		Valid:            true,
 	}
 }
 func NullFloat64(value float64) pgtype.Float8 {

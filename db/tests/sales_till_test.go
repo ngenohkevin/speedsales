@@ -9,6 +9,11 @@ import (
 	"time"
 )
 
+// Helper function to round the time
+func roundTime(t time.Time, precision time.Duration) time.Time {
+	return t.Round(precision)
+}
+
 func createRandomSalesTill(t *testing.T) db.SalesTill {
 	arg := db.CreateSales_tillParams{
 		TillNum:      utils.RandomAnyInt(),

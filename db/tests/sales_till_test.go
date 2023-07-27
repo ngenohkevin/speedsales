@@ -23,5 +23,13 @@ func createRandomSalesTill(t *testing.T) db.SalesTill {
 	require.NoError(t, err)
 	require.NotEmpty(t, salesTill)
 
+	require.Equal(t, arg.TillNum, salesTill.TillNum)
+	require.Equal(t, arg.Teller, salesTill.Teller)
+	require.Equal(t, arg.Supervisor, salesTill.Supervisor)
+	require.Equal(t, arg.Branch, salesTill.Branch)
+	require.Equal(t, arg.CloseTime, salesTill.CloseTime)
+	require.Equal(t, arg.CloseCash, salesTill.CloseCash)
+	require.Equal(t, arg.CloseSummary, salesTill.CloseSummary)
+
 	return salesTill
 }

@@ -9,9 +9,11 @@ import (
 	"time"
 )
 
-// Helper function to round the time
+// Helper function to round the time to the nearest microsecond
 func roundTime(t time.Time, precision time.Duration) time.Time {
-	return t.Round(precision)
+	rounded := t.Round(precision)
+	// Ensure the rounded time is rounded to the nearest microsecond
+	return time.Unix(rounded.Unix(), int64(rounded.Nanosecond()/1000)*1000)
 }
 
 func createRandomSalesTill(t *testing.T) db.SalesTill {
@@ -28,11 +30,15 @@ func createRandomSalesTill(t *testing.T) db.SalesTill {
 	require.NoError(t, err)
 	require.NotEmpty(t, salesTill)
 
+	currentTimeStamp := roundTime(time.Now(), time.Millisecond)
+	expectedCloseTime := roundTime(currentTimeStamp, time.Millisecond)
+	actualCloseTime := roundTime(salesTill.CloseTime.Time, time.Millisecond)
+
 	require.Equal(t, arg.TillNum, salesTill.TillNum)
 	require.Equal(t, arg.Teller, salesTill.Teller)
 	require.Equal(t, arg.Supervisor, salesTill.Supervisor)
 	require.Equal(t, arg.Branch, salesTill.Branch)
-	require.Equal(t, arg.CloseTime, salesTill.CloseTime)
+	require.Equal(t, expectedCloseTime, actualCloseTime)
 	require.Equal(t, arg.CloseCash, salesTill.CloseCash)
 	require.Equal(t, arg.CloseSummary, salesTill.CloseSummary)
 

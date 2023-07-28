@@ -65,4 +65,11 @@ func TestGetSalesTill(t *testing.T) {
 	err = json.Unmarshal(salesTill1.CloseSummary, &salesTill2.CloseSummary)
 	require.NoError(t, err)
 
+	require.Equal(t, salesTill1.TillNum, salesTill2.TillNum)
+	require.Equal(t, salesTill1.Teller, salesTill2.Teller)
+	require.Equal(t, salesTill1.Supervisor, salesTill2.Supervisor)
+	require.Equal(t, salesTill1.Branch, salesTill2.Branch)
+	require.Equal(t, salesTill1.CloseCash, salesTill2.CloseCash)
+	require.Equal(t, expectedCloseSummary, actualCloseSummary)
+
 }

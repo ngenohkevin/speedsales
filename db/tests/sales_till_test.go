@@ -54,5 +54,9 @@ func TestCreateSalesTill(t *testing.T) {
 }
 
 func TestGetSalesTill(t *testing.T) {
+	salesTill1 := createRandomSalesTill(t)
 
+	salesTill2, err := testQueries.GetSales_till(context.Background(), salesTill1.TillNum)
+	require.NoError(t, err)
+	require.NotEmpty(t, salesTill2)
 }

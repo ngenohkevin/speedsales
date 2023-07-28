@@ -52,3 +52,7 @@ func createRandomSalesTill(t *testing.T) db.SalesTill {
 func TestCreateSalesTill(t *testing.T) {
 	createRandomSalesTill(t)
 }
+
+func TestGetSalesTill(t *testing.T) {
+
+}

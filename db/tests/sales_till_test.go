@@ -3,7 +3,6 @@ package tests
 import (
 	"context"
 	"encoding/json"
-	"github.com/jackc/pgx/v5/pgtype"
 	db "github.com/ngenohkevin/speedsales/db/sqlc"
 	"github.com/ngenohkevin/speedsales/utils"
 	"github.com/stretchr/testify/require"
@@ -87,13 +86,16 @@ func TestUpdateSalesTill(t *testing.T) {
 
 	arg := db.UpdateSales_tillParams{
 		TillNum:      salesTill1.TillNum,
-		Teller:       pgtype.Text{},
-		Supervisor:   pgtype.Text{},
-		Branch:       pgtype.Text{},
-		OpenCash:     0,
-		CloseTime:    pgtype.Timestamptz{},
-		CloseTime_2:  pgtype.Timestamptz{},
-		CloseCash:    pgtype.Float8{},
-		CloseSummary: nil,
+		Teller:       utils.NullStrings(utils.RandomAnyString()),
+		Supervisor:   utils.NullStrings(utils.RandomAnyString()),
+		Branch:       utils.NullStrings(utils.RandomAnyString()),
+		OpenCash:     utils.RandomFloat(),
+		CloseTime:    utils.NullTimeStamp(time.Date(2023, time.July, 27, 11, 18, 10, 0, time.Local)),
+		CloseCash:    utils.NullFloat64(utils.RandomFloat()),
+		CloseSummary: utils.RandomJSON(5),
 	}
+
+	salesTill2, err := testQueries.UpdateSales_till(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, salesTill2)
 }

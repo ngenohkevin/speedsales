@@ -3,6 +3,7 @@ package tests
 import (
 	"context"
 	"encoding/json"
+	"github.com/jackc/pgx/v5/pgtype"
 	db "github.com/ngenohkevin/speedsales/db/sqlc"
 	"github.com/ngenohkevin/speedsales/utils"
 	"github.com/stretchr/testify/require"
@@ -16,6 +17,7 @@ func createRandomSalesTill(t *testing.T) db.SalesTill {
 		Teller:       utils.NullStrings(utils.RandomAnyString()),
 		Supervisor:   utils.NullStrings(utils.RandomAnyString()),
 		Branch:       utils.NullStrings(utils.RandomAnyString()),
+		OpenCash:     utils.RandomFloat(),
 		CloseTime:    utils.NullTimeStamp(time.Date(2023, time.July, 27, 11, 18, 10, 0, time.Local)), // Set the fixed CloseTime value
 		CloseCash:    utils.NullFloat64(utils.RandomFloat()),
 		CloseSummary: utils.RandomJSON(4),
@@ -43,8 +45,12 @@ func createRandomSalesTill(t *testing.T) db.SalesTill {
 	require.Equal(t, arg.Teller, salesTill.Teller)
 	require.Equal(t, arg.Supervisor, salesTill.Supervisor)
 	require.Equal(t, arg.Branch, salesTill.Branch)
+	require.Equal(t, arg.OpenCash, salesTill.OpenCash)
 	require.Equal(t, arg.CloseCash, salesTill.CloseCash)
 	require.Equal(t, expectedCloseSummary, actualCloseSummary)
+
+	require.NotZero(t, salesTill.OpenTime)
+	require.NotZero(t, salesTill.CloseTime)
 
 	return salesTill
 }
@@ -71,10 +77,23 @@ func TestGetSalesTill(t *testing.T) {
 	require.Equal(t, salesTill1.Teller, salesTill2.Teller)
 	require.Equal(t, salesTill1.Supervisor, salesTill2.Supervisor)
 	require.Equal(t, salesTill1.Branch, salesTill2.Branch)
+	require.Equal(t, salesTill1.OpenCash, salesTill2.OpenCash)
 	require.Equal(t, salesTill1.CloseCash, salesTill2.CloseCash)
 	require.Equal(t, expectedCloseSummary, actualCloseSummary)
 
 }
 func TestUpdateSalesTill(t *testing.T) {
+	salesTill1 := createRandomSalesTill(t)
 
+	arg := db.UpdateSales_tillParams{
+		TillNum:      salesTill1.TillNum,
+		Teller:       pgtype.Text{},
+		Supervisor:   pgtype.Text{},
+		Branch:       pgtype.Text{},
+		OpenCash:     0,
+		CloseTime:    pgtype.Timestamptz{},
+		CloseTime_2:  pgtype.Timestamptz{},
+		CloseCash:    pgtype.Float8{},
+		CloseSummary: nil,
+	}
 }

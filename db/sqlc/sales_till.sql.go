@@ -139,9 +139,8 @@ SET teller = $2,
     branch = $4,
     open_cash = $5,
     close_time = $6,
-    close_time = $7,
-    close_cash = $8,
-    close_summary = $9
+    close_cash = $7,
+    close_summary = $8
 WHERE till_num = $1
 RETURNING till_num, teller, supervisor, branch, open_time, open_cash, close_time, close_cash, close_summary
 `
@@ -153,7 +152,6 @@ type UpdateSales_tillParams struct {
 	Branch       pgtype.Text        `json:"branch"`
 	OpenCash     float64            `json:"open_cash"`
 	CloseTime    pgtype.Timestamptz `json:"close_time"`
-	CloseTime_2  pgtype.Timestamptz `json:"close_time_2"`
 	CloseCash    pgtype.Float8      `json:"close_cash"`
 	CloseSummary []byte             `json:"close_summary"`
 }
@@ -166,7 +164,6 @@ func (q *Queries) UpdateSales_till(ctx context.Context, arg UpdateSales_tillPara
 		arg.Branch,
 		arg.OpenCash,
 		arg.CloseTime,
-		arg.CloseTime_2,
 		arg.CloseCash,
 		arg.CloseSummary,
 	)

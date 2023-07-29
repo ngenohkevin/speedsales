@@ -75,3 +75,6 @@ func TestGetSalesTill(t *testing.T) {
 	require.Equal(t, expectedCloseSummary, actualCloseSummary)
 
 }
+func TestUpdateSalesTill(t *testing.T) {
+
+}

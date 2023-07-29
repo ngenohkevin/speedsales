@@ -132,20 +132,18 @@ func (q *Queries) ListSales_till(ctx context.Context, arg ListSales_tillParams) 
 
 const updateSales_till = `-- name: UpdateSales_till :one
 UPDATE sales_till
-SET till_num = $2,
-    teller = $3,
-    supervisor = $4,
-    open_cash = $5,
-    close_time = $6,
-    close_cash = $7,
-    close_time = $8
+SET teller = $2,
+    supervisor = $3,
+    open_cash = $4,
+    close_time = $5,
+    close_cash = $6,
+    close_time = $7
 WHERE till_num = $1
 RETURNING till_num, teller, supervisor, branch, open_time, open_cash, close_time, close_cash, close_summary
 `
 
 type UpdateSales_tillParams struct {
 	TillNum     int64              `json:"till_num"`
-	TillNum_2   int64              `json:"till_num_2"`
 	Teller      pgtype.Text        `json:"teller"`
 	Supervisor  pgtype.Text        `json:"supervisor"`
 	OpenCash    float64            `json:"open_cash"`
@@ -157,7 +155,6 @@ type UpdateSales_tillParams struct {
 func (q *Queries) UpdateSales_till(ctx context.Context, arg UpdateSales_tillParams) (SalesTill, error) {
 	row := q.db.QueryRow(ctx, updateSales_till,
 		arg.TillNum,
-		arg.TillNum_2,
 		arg.Teller,
 		arg.Supervisor,
 		arg.OpenCash,

@@ -18,13 +18,12 @@ OFFSET $3;
 
 -- name: UpdateSales_till :one
 UPDATE sales_till
-SET till_num = $2,
-    teller = $3,
-    supervisor = $4,
-    open_cash = $5,
-    close_time = $6,
-    close_cash = $7,
-    close_time = $8
+SET teller = $2,
+    supervisor = $3,
+    open_cash = $4,
+    close_time = $5,
+    close_cash = $6,
+    close_time = $7
 WHERE till_num = $1
 RETURNING *;
 

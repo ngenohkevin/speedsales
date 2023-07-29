@@ -13,9 +13,9 @@ import (
 
 const createSales_till = `-- name: CreateSales_till :one
 INSERT INTO sales_till (
-    till_num, teller, supervisor, branch, close_time, close_cash, close_summary
+    till_num, teller, supervisor, branch, open_cash, close_time, close_cash, close_summary
 ) VALUES (
-     $1, $2, $3, $4, $5, $6, $7
+     $1, $2, $3, $4, $5, $6, $7, $8
 ) RETURNING till_num, teller, supervisor, branch, open_time, open_cash, close_time, close_cash, close_summary
 `
 
@@ -24,6 +24,7 @@ type CreateSales_tillParams struct {
 	Teller       pgtype.Text        `json:"teller"`
 	Supervisor   pgtype.Text        `json:"supervisor"`
 	Branch       pgtype.Text        `json:"branch"`
+	OpenCash     float64            `json:"open_cash"`
 	CloseTime    pgtype.Timestamptz `json:"close_time"`
 	CloseCash    pgtype.Float8      `json:"close_cash"`
 	CloseSummary []byte             `json:"close_summary"`
@@ -35,6 +36,7 @@ func (q *Queries) CreateSales_till(ctx context.Context, arg CreateSales_tillPara
 		arg.Teller,
 		arg.Supervisor,
 		arg.Branch,
+		arg.OpenCash,
 		arg.CloseTime,
 		arg.CloseCash,
 		arg.CloseSummary,
@@ -134,22 +136,26 @@ const updateSales_till = `-- name: UpdateSales_till :one
 UPDATE sales_till
 SET teller = $2,
     supervisor = $3,
-    open_cash = $4,
-    close_time = $5,
-    close_cash = $6,
-    close_time = $7
+    branch = $4,
+    open_cash = $5,
+    close_time = $6,
+    close_time = $7,
+    close_cash = $8,
+    close_summary = $9
 WHERE till_num = $1
 RETURNING till_num, teller, supervisor, branch, open_time, open_cash, close_time, close_cash, close_summary
 `
 
 type UpdateSales_tillParams struct {
-	TillNum     int64              `json:"till_num"`
-	Teller      pgtype.Text        `json:"teller"`
-	Supervisor  pgtype.Text        `json:"supervisor"`
-	OpenCash    float64            `json:"open_cash"`
-	CloseTime   pgtype.Timestamptz `json:"close_time"`
-	CloseCash   pgtype.Float8      `json:"close_cash"`
-	CloseTime_2 pgtype.Timestamptz `json:"close_time_2"`
+	TillNum      int64              `json:"till_num"`
+	Teller       pgtype.Text        `json:"teller"`
+	Supervisor   pgtype.Text        `json:"supervisor"`
+	Branch       pgtype.Text        `json:"branch"`
+	OpenCash     float64            `json:"open_cash"`
+	CloseTime    pgtype.Timestamptz `json:"close_time"`
+	CloseTime_2  pgtype.Timestamptz `json:"close_time_2"`
+	CloseCash    pgtype.Float8      `json:"close_cash"`
+	CloseSummary []byte             `json:"close_summary"`
 }
 
 func (q *Queries) UpdateSales_till(ctx context.Context, arg UpdateSales_tillParams) (SalesTill, error) {
@@ -157,10 +163,12 @@ func (q *Queries) UpdateSales_till(ctx context.Context, arg UpdateSales_tillPara
 		arg.TillNum,
 		arg.Teller,
 		arg.Supervisor,
+		arg.Branch,
 		arg.OpenCash,
 		arg.CloseTime,
-		arg.CloseCash,
 		arg.CloseTime_2,
+		arg.CloseCash,
+		arg.CloseSummary,
 	)
 	var i SalesTill
 	err := row.Scan(

@@ -23,9 +23,8 @@ SET teller = $2,
     branch = $4,
     open_cash = $5,
     close_time = $6,
-    close_time = $7,
-    close_cash = $8,
-    close_summary = $9
+    close_cash = $7,
+    close_summary = $8
 WHERE till_num = $1
 RETURNING *;
 

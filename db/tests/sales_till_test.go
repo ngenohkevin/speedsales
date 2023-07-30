@@ -127,4 +127,6 @@ func TestListSalesTill(t *testing.T) {
 		Offset:  0,
 	}
 
+	salesTill, err := testQueries.ListSales_till(context.Background(), arg)
+
 }

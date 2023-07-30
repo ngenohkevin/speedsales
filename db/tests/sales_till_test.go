@@ -114,3 +114,12 @@ func TestUpdateSalesTill(t *testing.T) {
 	require.Equal(t, arg.CloseCash, salesTill2.CloseCash)
 	require.Equal(t, expectedCloseSummary, actualCloseSummary)
 }
+
+func TestListSalesTill(t *testing.T) {
+	var lastSalesTill db.SalesTill
+
+	for i := 0; i < 10; i++ {
+		lastSalesTill = createRandomSalesTill(t)
+	}
+
+}

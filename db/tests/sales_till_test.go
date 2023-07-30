@@ -128,5 +128,7 @@ func TestListSalesTill(t *testing.T) {
 	}
 
 	salesTill, err := testQueries.ListSales_till(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, salesTill)
 
 }

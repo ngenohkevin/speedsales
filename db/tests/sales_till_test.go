@@ -121,5 +121,10 @@ func TestListSalesTill(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		lastSalesTill = createRandomSalesTill(t)
 	}
+	arg := db.ListSales_tillParams{
+		TillNum: lastSalesTill.TillNum,
+		Limit:   5,
+		Offset:  0,
+	}
 
 }

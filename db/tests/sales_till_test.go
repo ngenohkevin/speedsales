@@ -101,8 +101,16 @@ func TestUpdateSalesTill(t *testing.T) {
 
 	expectedCloseSummary := make(map[string]interface{})
 	actualCloseSummary := make(map[string]interface{})
-	err = json.Unmarshal(salesTill1.CloseSummary, &expectedCloseSummary)
+	err = json.Unmarshal(arg.CloseSummary, &expectedCloseSummary)
 	require.NoError(t, err)
-	err = json.Unmarshal(salesTill2.CloseSummary, &actualCloseSummary)
+	err = json.Unmarshal(arg.CloseSummary, &actualCloseSummary)
 	require.NoError(t, err)
+
+	require.Equal(t, arg.TillNum, salesTill2.TillNum)
+	require.Equal(t, arg.Teller, salesTill2.Teller)
+	require.Equal(t, arg.Supervisor, salesTill2.Supervisor)
+	require.Equal(t, arg.Branch, salesTill2.Branch)
+	require.Equal(t, arg.OpenCash, salesTill2.OpenCash)
+	require.Equal(t, arg.CloseCash, salesTill2.CloseCash)
+	require.Equal(t, expectedCloseSummary, actualCloseSummary)
 }

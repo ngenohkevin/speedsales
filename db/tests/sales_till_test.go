@@ -98,4 +98,11 @@ func TestUpdateSalesTill(t *testing.T) {
 	salesTill2, err := testQueries.UpdateSales_till(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, salesTill2)
+
+	expectedCloseSummary := make(map[string]interface{})
+	actualCloseSummary := make(map[string]interface{})
+	err = json.Unmarshal(salesTill1.CloseSummary, &expectedCloseSummary)
+	require.NoError(t, err)
+	err = json.Unmarshal(salesTill2.CloseSummary, &actualCloseSummary)
+	require.NoError(t, err)
 }

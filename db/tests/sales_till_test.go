@@ -133,4 +133,6 @@ func TestListSalesTill(t *testing.T) {
 }
 func TestDeleteSalesTill(t *testing.T) {
 	salesTill1 := createRandomSalesTill(t)
+	err := testQueries.DeleteSales_till(context.Background(), salesTill1.TillNum)
+	require.NoError(t, err)
 }

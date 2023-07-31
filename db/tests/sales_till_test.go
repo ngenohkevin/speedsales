@@ -132,3 +132,6 @@ func TestListSalesTill(t *testing.T) {
 	require.NotEmpty(t, salesTill)
 
 }
+func TestDeleteSalesTill(t *testing.T) {
+
+}

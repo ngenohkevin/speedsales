@@ -132,5 +132,5 @@ func TestListSalesTill(t *testing.T) {
 
 }
 func TestDeleteSalesTill(t *testing.T) {
-
+	salesTill1 := createRandomSalesTill(t)
 }

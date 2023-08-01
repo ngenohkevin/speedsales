@@ -111,7 +111,7 @@ func RandomAnyString() string {
 	return RandomString(8)
 }
 func RandomAnyInt() int64 {
-	return int64(RandomInt(10, 100))
+	return int64(RandomInt(10, 10000))
 }
 func RandomDesc() string {
 	return RandomString(25)

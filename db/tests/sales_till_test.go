@@ -130,6 +130,11 @@ func TestListSalesTill(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, salesTill)
 
+	for _, sale := range salesTill {
+		require.NotEmpty(t, sale)
+		require.Equal(t, lastSalesTill.TillNum, sale.TillNum)
+	}
+
 }
 func TestDeleteSalesTill(t *testing.T) {
 	salesTill1 := createRandomSalesTill(t)

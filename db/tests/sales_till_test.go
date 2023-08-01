@@ -140,6 +140,12 @@ func TestDeleteSalesTill(t *testing.T) {
 	salesTill1 := createRandomSalesTill(t)
 
 	err := testQueries.DeleteSales_till(context.Background(), salesTill1.TillNum)
-
 	require.NoError(t, err)
+
+	salesTill, err := testQueries.GetSales_till(context.Background(), salesTill1.TillNum)
+	require.Error(t, err)
+
+	require.EqualError(t, err, utils.ErrRecordNotFound.Error())
+	require.Empty(t, salesTill)
+
 }

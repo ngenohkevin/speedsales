@@ -104,9 +104,10 @@ func RandomEmail() string {
 	return fmt.Sprintf("%s@email.com", RandomString(6))
 }
 
-func RandomDescription() string {
-	return RandomWord(6)
-}
+//func RandomDescription() string {
+//	return RandomWord(6)
+//}
+
 func RandomAnyString() string {
 	return RandomString(8)
 }

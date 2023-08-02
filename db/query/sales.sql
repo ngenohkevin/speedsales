@@ -1,0 +1,1 @@
+-- name: CreateSales :one

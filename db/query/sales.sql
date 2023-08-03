@@ -10,4 +10,7 @@ SELECT * FROM sales
 WHERE product_id = $1 LIMIT 1;
 
 -- name: ListSale :many
-SELECT
+SELECT * FROM sales
+WHERE product_id = $1
+ORDER BY item_name
+LIMIT $2

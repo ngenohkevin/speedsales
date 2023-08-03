@@ -14,4 +14,4 @@ SELECT * FROM sales
 WHERE product_id = $1
 ORDER BY item_name
 LIMIT $2
-OFFSET $3
+OFFSET $3;

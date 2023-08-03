@@ -8,3 +8,5 @@ INSERT INTO sales (
 -- name: GetSales :one
 SELECT * FROM sales
 WHERE product_id = $1 LIMIT 1
+
+-- name: ListSale :many

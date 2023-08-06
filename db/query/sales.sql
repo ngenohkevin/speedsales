@@ -9,9 +9,11 @@ INSERT INTO sales (
 SELECT * FROM sales
 WHERE product_id = $1 LIMIT 1;
 
--- name: ListSale :many
+-- name: ListSales :many
 SELECT * FROM sales
 WHERE product_id = $1
 ORDER BY item_name
 LIMIT $2
 OFFSET $3;
+
+-- name: UpdateSale

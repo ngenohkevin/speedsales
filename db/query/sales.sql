@@ -16,4 +16,10 @@ ORDER BY item_name
 LIMIT $2
 OFFSET $3;
 
--- name: UpdateSale
+-- name: UpdateSale :one
+UPDATE sales
+SET item_name = $2,
+    vat_code = $3,
+    hs_code = $4,
+    batch_code = $5,
+

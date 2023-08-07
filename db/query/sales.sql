@@ -29,7 +29,7 @@ RETURNING *;
 
 -- name: DeleteSale :exec
 DELETE FROM sales
-WHERE product_id =
+WHERE product_id = $1
 
 
 

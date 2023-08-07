@@ -28,6 +28,8 @@ WHERE till_num = $1
 RETURNING *;
 
 -- name: DeleteSale :exec
+DELETE FROM sales
+WHERE product_id =
 
 
 

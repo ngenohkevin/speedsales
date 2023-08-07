@@ -23,5 +23,7 @@ SET item_name = $2,
     hs_code = $4,
     batch_code = $5,
     serial_code = $6,
+    serial_code_return = $7,
+
 
 

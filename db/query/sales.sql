@@ -27,5 +27,7 @@ SET item_name = $2,
 WHERE till_num = $1
 RETURNING *;
 
+-- name: DeleteSale :exec
+
 
 

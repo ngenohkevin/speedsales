@@ -25,6 +25,7 @@ SET item_name = $2,
     serial_code = $6,
     serial_code_return = $7
 WHERE till_num = $1
+RETURNING *;
 
 
 

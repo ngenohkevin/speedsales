@@ -72,21 +72,21 @@ func (q *Queries) CreateSales(ctx context.Context, arg CreateSalesParams) (Sale,
 
 const deleteSale = `-- name: DeleteSale :exec
 DELETE FROM sales
-WHERE product_id = $1
+WHERE receipt_num = $1
 `
 
-func (q *Queries) DeleteSale(ctx context.Context, productID int64) error {
-	_, err := q.db.Exec(ctx, deleteSale, productID)
+func (q *Queries) DeleteSale(ctx context.Context, receiptNum int64) error {
+	_, err := q.db.Exec(ctx, deleteSale, receiptNum)
 	return err
 }
 
 const getSales = `-- name: GetSales :one
 SELECT receipt_num, till_num, txn_time, product_id, item_name, price, cost, quantity, vat_code, hs_code, "VAT", batch_code, serial_code, serial_code_return, served_by, approved_by, state FROM sales
-WHERE product_id = $1 LIMIT 1
+WHERE receipt_num = $1 LIMIT 1
 `
 
-func (q *Queries) GetSales(ctx context.Context, productID int64) (Sale, error) {
-	row := q.db.QueryRow(ctx, getSales, productID)
+func (q *Queries) GetSales(ctx context.Context, receiptNum int64) (Sale, error) {
+	row := q.db.QueryRow(ctx, getSales, receiptNum)
 	var i Sale
 	err := row.Scan(
 		&i.ReceiptNum,
@@ -112,20 +112,20 @@ func (q *Queries) GetSales(ctx context.Context, productID int64) (Sale, error) {
 
 const listSales = `-- name: ListSales :many
 SELECT receipt_num, till_num, txn_time, product_id, item_name, price, cost, quantity, vat_code, hs_code, "VAT", batch_code, serial_code, serial_code_return, served_by, approved_by, state FROM sales
-WHERE product_id = $1
+WHERE receipt_num = $1
 ORDER BY item_name
 LIMIT $2
 OFFSET $3
 `
 
 type ListSalesParams struct {
-	ProductID int64 `json:"product_id"`
-	Limit     int32 `json:"limit"`
-	Offset    int32 `json:"offset"`
+	ReceiptNum int64 `json:"receipt_num"`
+	Limit      int32 `json:"limit"`
+	Offset     int32 `json:"offset"`
 }
 
 func (q *Queries) ListSales(ctx context.Context, arg ListSalesParams) ([]Sale, error) {
-	rows, err := q.db.Query(ctx, listSales, arg.ProductID, arg.Limit, arg.Offset)
+	rows, err := q.db.Query(ctx, listSales, arg.ReceiptNum, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -170,12 +170,12 @@ SET item_name = $2,
     batch_code = $5,
     serial_code = $6,
     serial_code_return = $7
-WHERE product_id = $1
+WHERE receipt_num = $1
 RETURNING receipt_num, till_num, txn_time, product_id, item_name, price, cost, quantity, vat_code, hs_code, "VAT", batch_code, serial_code, serial_code_return, served_by, approved_by, state
 `
 
 type UpdateSaleParams struct {
-	ProductID        int64       `json:"product_id"`
+	ReceiptNum       int64       `json:"receipt_num"`
 	ItemName         pgtype.Text `json:"item_name"`
 	VatCode          pgtype.Text `json:"vat_code"`
 	HsCode           pgtype.Text `json:"hs_code"`
@@ -186,7 +186,7 @@ type UpdateSaleParams struct {
 
 func (q *Queries) UpdateSale(ctx context.Context, arg UpdateSaleParams) (Sale, error) {
 	row := q.db.QueryRow(ctx, updateSale,
-		arg.ProductID,
+		arg.ReceiptNum,
 		arg.ItemName,
 		arg.VatCode,
 		arg.HsCode,

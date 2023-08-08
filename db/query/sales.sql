@@ -24,12 +24,12 @@ SET item_name = $2,
     batch_code = $5,
     serial_code = $6,
     serial_code_return = $7
-WHERE product_id = $1
+WHERE receipt_num = $1
 RETURNING *;
 
 -- name: DeleteSale :exec
 DELETE FROM sales
-WHERE product_id = $1;
+WHERE receipt_num = $1;
 
 
 

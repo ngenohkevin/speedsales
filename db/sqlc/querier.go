@@ -21,7 +21,7 @@ type Querier interface {
 	DeleteCustomer(ctx context.Context, customerID int64) error
 	DeleteDepartment(ctx context.Context, departmentID int64) error
 	DeleteProducts(ctx context.Context, productID int64) error
-	DeleteSale(ctx context.Context, productID int64) error
+	DeleteSale(ctx context.Context, receiptNum int64) error
 	DeleteSales_till(ctx context.Context, tillNum int64) error
 	DeleteSupplier(ctx context.Context, supplierID int64) error
 	DeleteUsers(ctx context.Context, userID int64) error
@@ -29,7 +29,7 @@ type Querier interface {
 	GetCustomer(ctx context.Context, customerID int64) (Customer, error)
 	GetDepartment(ctx context.Context, departmentID int64) (Department, error)
 	GetProducts(ctx context.Context, productID int64) (Product, error)
-	GetSales(ctx context.Context, productID int64) (Sale, error)
+	GetSales(ctx context.Context, receiptNum int64) (Sale, error)
 	GetSales_till(ctx context.Context, tillNum int64) (SalesTill, error)
 	GetSupplier(ctx context.Context, supplierID int64) (Supplier, error)
 	GetUser(ctx context.Context, userID int64) (User, error)

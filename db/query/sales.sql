@@ -11,7 +11,7 @@ WHERE receipt_num = $1 LIMIT 1;
 
 -- name: ListSales :many
 SELECT * FROM sales
-WHERE product_id = $1
+WHERE receipt_num = $1
 ORDER BY item_name
 LIMIT $2
 OFFSET $3;

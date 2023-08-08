@@ -7,7 +7,7 @@ INSERT INTO sales (
 
 -- name: GetSales :one
 SELECT * FROM sales
-WHERE product_id = $1 LIMIT 1;
+WHERE receipt_num = $1 LIMIT 1;
 
 -- name: ListSales :many
 SELECT * FROM sales
